@@ -65,6 +65,7 @@
                         </div>
                         <div class="flex flex-row">
                             <SocialIcons network="github"/>
+                            <SocialIcons network="telegram"/>
                         </div>
                     </div>
                 </div>
