@@ -12,6 +12,8 @@
     import { Icon } from "@steeze-ui/svelte-icon";
 
     import { DocumentArrowUp, PlusCircle, Trash } from "@steeze-ui/heroicons";
+
+    import SocialIcons from '@rodneylab/svelte-social-icons';
 </script>
 
 <svelte:head>
@@ -60,6 +62,9 @@
                             <ul>
                                 <li><a href="tel:+79999999999">+79999999999</a></li>
                             </ul>
+                        </div>
+                        <div class="flex flex-row">
+                            <SocialIcons network="github"/>
                         </div>
                     </div>
                 </div>

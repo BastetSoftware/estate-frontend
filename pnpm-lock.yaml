@@ -7,9 +7,15 @@ dependencies:
   '@fontsource/source-code-pro':
     specifier: ^4.5.14
     version: 4.5.14
+  '@fontsource/source-sans-pro':
+    specifier: ^4.5.11
+    version: 4.5.11
   '@popperjs/core':
     specifier: ^2.11.7
     version: 2.11.7
+  '@rodneylab/svelte-social-icons':
+    specifier: ^0.0.25
+    version: 0.0.25
   '@steeze-ui/heroicons':
     specifier: ^2.2.2
     version: 2.2.2
@@ -336,6 +342,10 @@ packages:
 
   /@popperjs/core@2.11.7:
     resolution: {integrity: sha512-Cr4OjIkipTtcXKjAsm8agyleBuDHvxzeBoa1v543lbv1YaIwQjESsVcmjiWiPEbC1FIeHOG/Op9kdCmAmiS3Kw==}
+    dev: false
+
+  /@rodneylab/svelte-social-icons@0.0.25:
+    resolution: {integrity: sha512-WwR6yIExRiSvO0V4K0R/ieg5JO/2e3BgGQpYyFSxqvMpCU2LyB/UIjVHTOt2bGrDWdm1jt+o/ozns4Mupglprw==}
     dev: false
 
   /@steeze-ui/heroicons@2.2.2:
