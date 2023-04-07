@@ -41,7 +41,7 @@
 </div>
 <div class="p-5 w-full flex flex-col lg:flex-row gap-x-3 gap-y-3">
     <div class="w-full">
-        <Table>
+        <Table shadow>
             <TableHead>
                 <TableHeadCell>Адрес</TableHeadCell>
                 <TableHeadCell>Координаты</TableHeadCell>
