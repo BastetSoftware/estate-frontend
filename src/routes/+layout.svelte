@@ -28,74 +28,96 @@
     HomeModern,
     QuestionMarkCircle,
     Users,
+    User,
     ComputerDesktop,
     DocumentText,
+    ArrowRightOnRectangle,
+    Cog6Tooth,
   } from "@steeze-ui/heroicons";
 </script>
 
 <div class="app">
   <main>
-    <!--<Navbar
+    <Navbar
       let:hidden
       let:toggle
-      navDivClass="mx-auto w-full block flex justify-between"
+      navClass="w-full sticky top-0 z-20"
+      navDivClass="w-full flex flex-col justify-between pt-2 md:pt-0 pb-0 pl-4 pr-4 items-center max-w-full"
     >
-      <div>
-        <NavBrand href="/">
-          <img
-            src="https://flowbite.com/docs/images/logo.svg"
-            class="mr-3 h-6 sm:h-9"
-            alt="Flowbite Logo"
-          />
-          <span
-            class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
-            >Bastet System</span
-          >
+      <div class="w-full flex flex-row justify-between items-center max-w-full">
+        <NavBrand>
+          <b class="text-xl text-bolder">Bastet System</b>
         </NavBrand>
+        <div class="flex flex-row gap-4">
+          <NavUl>
+            <NavLi href="/" class="flex items-center min-w-fit"
+              ><Icon src={ComputerDesktop} class="w-6 pr-2 p-0" /> Главная</NavLi
+            >
+            <NavLi href="/" class="flex items-center min-w-fit"
+              ><Icon src={HomeModern} class="w-6 pr-2 p-0" /> Объекты</NavLi
+            >
+            <NavLi href="/" class="flex items-center min-w-fit"
+              ><Icon src={DocumentText} class="w-6 pr-2 p-0" /> Задачи</NavLi
+            >
+            <NavLi href="/" class="flex items-center min-w-fit"
+              ><Icon src={Users} class="w-6 pr-2 p-0" /> Люди</NavLi
+            >
+            <NavLi href="/" class="flex items-center min-w-fit"
+              ><Icon src={QuestionMarkCircle} class="w-6 pr-2 p-0" /> Справка</NavLi
+            >
+          </NavUl>
+          <div class="flex items-center md:order-2 place-self-right">
+            <Avatar id="avatar-menu" />
+            <NavHamburger
+              on:click={toggle}
+              class1="w-full md:flex md:w-auto md:order-1"
+            />
+          </div>
+          <Dropdown placement="bottom" triggeredBy="#avatar-menu">
+            <DropdownHeader>
+              <b><span class="block text-sm">Никитин И. С.</span></b>
+            </DropdownHeader>
+            <DropdownItem
+              class="flex items-center flex-row gap-x-2"
+              href="/account/"
+              ><Icon src={User} class="w-6" /> Профиль</DropdownItem
+            >
+            <DropdownItem
+              class="flex items-center flex-row gap-x-2"
+              href="/account/settings"
+              ><Icon src={Cog6Tooth} class="w-6" /> Настройки</DropdownItem
+            >
+            <DropdownDivider />
+            <DropdownItem class="flex items-center flex-row gap-x-2"
+              ><Icon src={ArrowRightOnRectangle} class="w-6" /> Выйти</DropdownItem
+            >
+          </Dropdown>
+        </div>
       </div>
-      <div class="flex">
-        <NavUl
-          {hidden}
-          divClass="w-full md:block md:w-auto flex place-self-center"
-        >
-          <NavLi href="/" active={true} class="flex min-w-fit"
-            ><Icon src={ComputerDesktop} class="w-6 pr-2 p-0" />Главная</NavLi
+      <div class="md:hidden w-full p-0 m-0 py-1">
+        <NavUl {hidden} ulClass="flex flex-col">
+          <NavLi href="/" class="flex items-center min-w-fit"
+            ><Icon src={ComputerDesktop} class="w-6 pr-2 p-0" /> Главная</NavLi
           >
           <NavLi href="/" class="flex items-center min-w-fit"
             ><Icon src={HomeModern} class="w-6 pr-2 p-0" /> Объекты</NavLi
           >
-          <NavLi href="/about" class="flex items-center min-w-fit"
+          <NavLi href="/" class="flex items-center min-w-fit"
             ><Icon src={DocumentText} class="w-6 pr-2 p-0" /> Задачи</NavLi
           >
-          <NavLi href="/services" class="flex items-center min-w-fit"
+          <NavLi href="/" class="flex items-center min-w-fit"
             ><Icon src={Users} class="w-6 pr-2 p-0" /> Люди</NavLi
           >
-          <NavLi href="/contact" class="flex items-center min-w-fit"
+          <NavLi href="/" class="flex items-center min-w-fit"
             ><Icon src={QuestionMarkCircle} class="w-6 pr-2 p-0" /> Справка</NavLi
           >
         </NavUl>
-        <div class="flex items-center md:order-2 place-self-right">
-          <Avatar id="avatar-menu" src="/images/profile-picture-3.webp" />
-          <NavHamburger
-            on:click={toggle}
-            class1="w-full md:flex md:w-auto md:order-1"
-          />
-        </div>
       </div>
-      <Dropdown placement="bottom" triggeredBy="#avatar-menu">
-        <DropdownHeader>
-          <span class="block text-sm"> Bonnie Green </span>
-          <span class="block truncate text-sm font-medium">
-            name@flowbite.com
-          </span>
-        </DropdownHeader>
-        <DropdownItem>Dashboard</DropdownItem>
-        <DropdownItem>Settings</DropdownItem>
-        <DropdownItem>Earnings</DropdownItem>
-        <DropdownDivider />
-        <DropdownItem>Sign out</DropdownItem>
-      </Dropdown>
-    </Navbar>-->
-    <slot />
+    </Navbar>
+    <div class="flex justify-center w-full">
+      <div class="w-full xl:w-5/6">
+        <slot />
+      </div>
+    </div>
   </main>
 </div>
