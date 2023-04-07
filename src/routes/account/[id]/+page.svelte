@@ -12,8 +12,8 @@
     import { Icon } from "@steeze-ui/svelte-icon";
 
     import { DocumentArrowUp, PlusCircle, Trash } from "@steeze-ui/heroicons";
-
-    import SocialIcons from '@rodneylab/svelte-social-icons';
+    
+    import { Telegram, Discord, Whatsapp } from "@steeze-ui/simple-icons";
 </script>
 
 <svelte:head>
@@ -63,10 +63,10 @@
                                 <li><a href="tel:+79999999999">+79999999999</a></li>
                             </ul>
                         </div>
-                        <div class="flex flex-row">
-                            <SocialIcons network="github"/>
-                            <SocialIcons network="telegram"/>
-                            <SocialIcons network="Discord"/>
+                        <div class="flex flex-row gap-x-3 gap-y-1">
+                            <Icon src={Telegram} class="w-10"/>
+                            <Icon src={Discord} class="w-10"/>
+                            <Icon src={Whatsapp} class="w-10"/>
                         </div>
                     </div>
                 </div>
