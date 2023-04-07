@@ -2,17 +2,9 @@
     import {
         Avatar,
         Card,
-        Label,
-        Input,
-        Checkbox,
-        Button,
-        FloatingLabelInput,
     } from "flowbite-svelte";
 
     import { Icon } from "@steeze-ui/svelte-icon";
-
-    import { DocumentArrowUp, PlusCircle, Trash } from "@steeze-ui/heroicons";
-    
     import { Telegram, Discord, Whatsapp } from "@steeze-ui/simple-icons";
 </script>
 
@@ -42,7 +34,7 @@
     <div class="w-full lg:w-2/3 flex flex-col gap-y-3 h-min">
         <Card class="flex grow h-min min-w-full">
                 <div
-                    class="grid grid-cols-1 pt-3 gap-x-3 gap-y-3 text-zinc-800 mb-3"
+                    class="grid grid-cols-1 gap-x-3 gap-y-3 text-zinc-800"
                 >
                     <div class="flex flex-col gap-y-3">
                         <div>

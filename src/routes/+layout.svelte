@@ -53,7 +53,7 @@
             <NavLi href="/" class="flex items-center min-w-fit"
               ><Icon src={ComputerDesktop} class="w-6 pr-2 p-0" /> Главная</NavLi
             >
-            <NavLi href="/" class="flex items-center min-w-fit"
+            <NavLi href="/object/list" class="flex items-center min-w-fit"
               ><Icon src={HomeModern} class="w-6 pr-2 p-0" /> Объекты</NavLi
             >
             <NavLi href="/" class="flex items-center min-w-fit"
@@ -99,7 +99,7 @@
           <NavLi href="/" class="flex items-center min-w-fit"
             ><Icon src={ComputerDesktop} class="w-6 pr-2 p-0" /> Главная</NavLi
           >
-          <NavLi href="/" class="flex items-center min-w-fit"
+          <NavLi href="/object/list" class="flex items-center min-w-fit"
             ><Icon src={HomeModern} class="w-6 pr-2 p-0" /> Объекты</NavLi
           >
           <NavLi href="/" class="flex items-center min-w-fit"

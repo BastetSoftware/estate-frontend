@@ -2,15 +2,12 @@
     import {
         Avatar,
         Card,
-        Label,
-        Input,
         Checkbox,
         Button,
         FloatingLabelInput,
     } from "flowbite-svelte";
 
     import { Icon } from "@steeze-ui/svelte-icon";
-
     import { DocumentArrowUp, PlusCircle, Trash } from "@steeze-ui/heroicons";
 </script>
 
