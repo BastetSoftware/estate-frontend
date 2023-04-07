@@ -39,7 +39,7 @@
             </div>
         </Card>
     </div>
-    <div class="w-full lg:w-2/3 flex flex-col gap-y-3">
+    <div class="w-full lg:w-2/3 flex flex-col gap-y-3 h-min">
         <Card class="flex grow h-min min-w-full">
             <h2 class="text-zinc-800">Общая информация</h2>
             <form>
@@ -136,7 +136,7 @@
                     <p class="lg:col-span-2"><b>Адреса эл. почты</b></p>
                     <div class="flex flex-col gap-y-3">
                         <div class="flex flex-row gap-x-3 w-full">
-                            <div class="w-max-fit">
+                            <div class="w-full">
                                 <FloatingLabelInput
                                     style="outlined"
                                     id="email1"
@@ -149,14 +149,20 @@
                                 <Icon src={Trash} class="w-4" />
                             </Button>
                         </div>
-
-                        <FloatingLabelInput
-                            style="outlined"
-                            id="email2"
-                            name="email2"
-                            type="email"
-                            label="Адрес 2"
-                        />
+                        <div class="flex flex-row gap-x-3 w-full">
+                            <div class="w-full">
+                                <FloatingLabelInput
+                                    style="outlined"
+                                    id="email2"
+                                    name="email2"
+                                    type="email"
+                                    label="Адрес 2"
+                                />
+                            </div>
+                            <Button color="red">
+                                <Icon src={Trash} class="w-4" />
+                            </Button>
+                        </div>
                         <Button>
                             Добавить<Icon
                                 src={PlusCircle}
