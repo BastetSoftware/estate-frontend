@@ -1,6 +1,6 @@
 <script>
     import "../../app.postcss";
-    import "../styles.css";
+    import "../../styles.css";
 
     import {
         Navbar,
