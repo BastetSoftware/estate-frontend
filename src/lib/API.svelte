@@ -8,7 +8,7 @@
         
         let response = await fetch(address, {
             method: 'POST',
-            body: new Uint8Array(args)
+            body: query
         });
         
         if (response.ok) {

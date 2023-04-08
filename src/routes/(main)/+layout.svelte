@@ -38,6 +38,31 @@
         Plus,
         DocumentCheck,
     } from "@steeze-ui/heroicons";
+    
+    import { SendAPICall } from "$lib/API.svelte";
+    import { goto } from '$app/navigation';
+    import { token } from '$lib/Storage.js'
+    import { onMount } from "svelte";
+    import { get } from 'svelte/store'
+    
+    onMount(() => {
+        if (get(token).value == undefined) {
+            goto('/login');
+        }
+    });
+    
+    async function Logout() {
+        var data = await SendAPICall("user_log_out", {
+            Token: get(token)
+        });
+        
+        token.set({});
+        goto('/login');
+    }
+    
+    const logoutBtn = async () => {
+        await Logout();
+    }
 </script>
 
 <div class="app">
@@ -112,8 +137,8 @@
                             ><Icon src={Cog6Tooth} class="w-6" /> Настройки</DropdownItem
                         >
                         <DropdownDivider />
-                        <DropdownItem class="flex items-center flex-row gap-x-2"
-                            ><Icon src={ArrowRightOnRectangle} class="w-6" /> Выйти</DropdownItem
+                        <DropdownItem on:click={logoutBtn} class="flex items-center flex-row gap-x-2"
+                            ><Icon src={ArrowRightOnRectangle} class="w-6"/> Выйти</DropdownItem
                         >
                     </Dropdown>
                 </div>

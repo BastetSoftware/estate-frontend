@@ -40,6 +40,7 @@
     "date-picker-svelte": "^2.3.0",
     "flowbite": "^1.6.4",
     "flowbite-svelte": "^0.34.7",
-    "msgpackr": "^1.8.5"
+    "msgpackr": "^1.8.5",
+    "svelte-local-storage-store": "^0.4.0"
   }
 }

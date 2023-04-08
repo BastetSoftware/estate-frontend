@@ -1,4 +1,6 @@
 <script>
+    import { token } from "$lib/Storage";
+
     import { Button, Dropdown, DropdownItem, Chevron } from "flowbite-svelte";
     import {
         Navbar,
@@ -8,29 +10,55 @@
         NavHamburger,
     } from "flowbite-svelte";
     import { BottomNav, BottomNavItem } from "flowbite-svelte";
+    
+    import { SendAPICall } from "$lib/API.svelte";
+    import { goto } from '$app/navigation';
+    
+    let loginInput = "";
+    let pwdInput = "";
+    
+    async function Login() {
+        var data = await SendAPICall("user_log_in", {
+            Login: loginInput.toString(),
+            Password: pwdInput.toString()
+        });
+        
+        if (data.Code) {
+            alert(`Произошла ошибка входа (${data.Code}). Проверьте правильность учётных данных.`);
+            return
+        }
+        
+        token.set({value: data.Token});
+        goto('/');
+    }
+    
+    const loginBtn = async () => {
+        await Login();
+    }
 </script>
 
 <body>
     <center>
-        <h1 style="color:#17202A text-xl">Войти в свой аккаунт</h1>
+        <h1 style="color:#17202A text-xl">Войти в аккаунт</h1>
 
         <form>
             <p style="color:#17202A">
                 <label for="login">Логин:</label>
             </p>
             <p>
-                <input type="text" placeholder="Введите логин" class="login" />
+                <input type="text" placeholder="Введите логин" class="login" bind:value="{loginInput}"/>
             </p>
 
             <p style="color:#17202A">
                 <label for="login">Пароль:</label>
             </p>
             <p>
-                <input type="text" placeholder="Введите пароль" class="pass" />
+                <input type="text" placeholder="Введите пароль" class="pass" bind:value="{pwdInput}"/>
 
             </p>
             <button
                 type="button"
+                on:click={loginBtn}
                 class="text-white uppercase bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                 >Войти</button>
             <p />
@@ -46,6 +74,8 @@
 <style>
     body {
         background-color: #f9fafb;
+        margin: 0;
+        padding: 0;
     }
 
     form {
@@ -59,9 +89,8 @@
     h1 {
         background-color: #ffffff;
         width: 500px;
-        padding-bottom: 5px;
+        margin-bottom: 5px;
         border-bottom: 3px solid #4382ff;
-        width: 500px;
         margin: 10px;
         border-radius: 15px;
         box-shadow: 0 0 5px rgba(122, 122, 122, 0.5);
