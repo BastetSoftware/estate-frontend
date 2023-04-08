@@ -12,11 +12,12 @@
         Fileupload,
         Listgroup,
         ListgroupItem,
-        Helper
+        Helper,
+        Textarea,
     } from "flowbite-svelte";
 
     import { Icon } from "@steeze-ui/svelte-icon";
-    import { Folder, DocumentArrowUp } from "@steeze-ui/heroicons";
+    import { Folder, DocumentArrowUp, DocumentText } from "@steeze-ui/heroicons";
     import { Telegram, Discord, Whatsapp } from "@steeze-ui/simple-icons";
 
     let images = [
@@ -40,6 +41,18 @@
     ];
 
     let files;
+
+    let name = "";
+    let type;
+    let desc;
+    let district;
+    let region;
+    let area;
+    let owner;
+    let address;
+    let state;
+    let actual_user;
+    let obj_type;
 </script>
 
 <svelte:head>
@@ -57,9 +70,9 @@
     <div class="w-full lg:w-1/2 flex flex-col gap-y-3 h-min">
         <Card class="flex grow h-min min-w-full">
             <form>
-                <Button class="w-full"
+                <Button class="bg-gray-500 w-full"
                     >Заполнить из .XML-файла <Icon
-                        src={DocumentArrowUp}
+                        src={DocumentText}
                         class="w-4 ml-1 p-0"
                     /></Button
                 >
@@ -72,34 +85,66 @@
                             id="address"
                             name="floating_outlined"
                             type="text"
+                            bind:value={address}
+                        />
+                        <Select
+                            placeholder="Регион"
+                            items={countries}
+                            bind:value={region}
                         />
                         <Select
                             placeholder="Округ"
                             items={countries}
-                            bind:value={selected}
+                            bind:value={district}
                         />
-                        <Input
-                            style="outlined"
-                            id="patronymic"
-                            name="floating_outlined"
-                            type="text"
-                            label="Отчество"
-                        />
-                    </div>
-                    <div class="flex flex-col gap-y-3">
                         <Select
                             placeholder="Тип объекта"
                             items={countries}
-                            bind:value={selected}
-                        />
-                        <FloatingLabelInput
-                            style="outlined"
-                            id="email"
-                            name="email"
-                            type="email"
-                            label="Основной адрес эл. почты"
+                            bind:value={obj_type}
                         />
                     </div>
+                    <div class="flex flex-col gap-y-3">
+                        <Input
+                            placeholder="Площадь (м²)"
+                            id="area"
+                            name="floating_outlined"
+                            type="number"
+                            bind:value={area}
+                        />
+                        <Input
+                            placeholder="Состояние"
+                            id="state"
+                            name="floating_outlined"
+                            type="text"
+                            bind:value={state}
+                        />
+                        <Input
+                            placeholder="Собственник"
+                            id="owner"
+                            name="floating_outlined"
+                            type="text"
+                            bind:value={owner}
+                        />
+                        <Input
+                            placeholder="Фактический пользователь"
+                            id="obj_user"
+                            name="floating_outlined"
+                            type="text"
+                            bind:value={actual_user}
+                        />
+                    </div>
+                    <Textarea
+                        id="desc"
+                        placeholder="Описание"
+                        bind:value={desc}
+                        class="lg:col-span-2"
+                    />
+                    <Button class="lg:col-span-2"
+                        >Внести в базу <Icon
+                            src={DocumentArrowUp}
+                            class="w-4 ml-1 p-0"
+                        /></Button
+                    >
                 </div>
             </form>
         </Card>
@@ -107,13 +152,16 @@
     <div class="w-full lg:w-1/2 flex flex-col gap-y-3 h-min">
         <Card class="flex grow h-min min-w-full">
             <form>
-                <div
-                    class="grid grid-cols-1 pt-3 gap-x-3 gap-y-3 text-zinc-800"
-                >
+                <div class="grid grid-cols-1 gap-x-3 gap-y-3 text-zinc-800">
                     <div class="flex flex-col gap-y-3">
                         <h4>Прикрепление файлов</h4>
                         <Fileupload id="multiple_files" multiple bind:files />
-                        <Helper>Поддерживаются картинки (.JPEG, .PNG), видеоролики (MP4, AVI, MOV), документы (.DOCX, .DOC, .ODT, .PDF), таблицы (.XLS, .XLSX)</Helper>
+                        <Helper
+                            >Что поддерживается:<br />— картинки (.JPEG, .PNG),<br
+                            />— видеоролики (MP4, AVI, MOV),<br />— документы
+                            (.DOCX, .DOC, .ODT, .PDF),<br />— таблицы (.XLS,
+                            .XLSX)</Helper
+                        >
                         <Listgroup items={files} let:item class="mt-2">
                             {#if item}
                                 {item.name}
@@ -121,7 +169,6 @@
                                 <ListgroupItem>Файлов нет.</ListgroupItem>
                             {/if}
                         </Listgroup>
-                        
                     </div>
                 </div>
             </form>

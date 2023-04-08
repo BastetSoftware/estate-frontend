@@ -9,33 +9,35 @@
 
     import { Icon } from "@steeze-ui/svelte-icon";
     import { DocumentArrowUp, PlusCircle, Trash } from "@steeze-ui/heroicons";
-    
+
     import { SendAPICall } from "$lib/API.svelte";
     import { onMount } from "svelte";
-    import { get } from 'svelte/store';
-    
+    import { get } from "svelte/store";
+
     import { storage } from "$lib/Storage";
     import { goto } from "$app/navigation";
-    
+
     let name = "";
     let surname = "";
     let patronymic = "";
     let password = "";
     let main_email = "";
-    
+
+    let contacts = { phones: [], emails: [], socials: [] };
+
     onMount(async () => {
         var accountData = await SendAPICall("user_get_info", {
             Login: get(storage).login,
-            Token: get(storage).token
+            Token: get(storage).token,
         });
-        
+
         name = accountData.FirstName;
         surname = accountData.LastName;
         if (accountData.Patronymic != "-") {
             patronymic = accountData.Patronymic;
         }
     });
-    
+
     async function UpdateInfo() {
         var data = await SendAPICall("user_edit", {
             Token: get(storage).token,
@@ -43,52 +45,48 @@
             LastName: surname.toString(),
             Patronymic: patronymic.toString(),
         });
-        
+
         if (data.Code) {
-            alert(
-                `Произошла ошибка (${data.Code}).`
-            );
+            alert(`Произошла ошибка (${data.Code}).`);
             return;
         }
-        
+
         alert("Данные успешно обновились!");
         goto("/account/settings");
     }
-    
+
     async function UpdatePwd() {
         if (password == "") {
-            return
+            return;
         }
-        
+
         // TODO: перенести валидацию пароля на бэкенд
         if (password.length < 8) {
             alert("Придумайте пароль длиннее восьми символов.");
-            return
-        }
-        
-        var data = await SendAPICall("user_edit", {
-            Token: get(storage).token,
-            Password: password.toString()
-        });
-        
-        if (data.Code) {
-            alert(
-                `Произошла ошибка (${data.Code}).`
-            );
             return;
         }
-        
+
+        var data = await SendAPICall("user_edit", {
+            Token: get(storage).token,
+            Password: password.toString(),
+        });
+
+        if (data.Code) {
+            alert(`Произошла ошибка (${data.Code}).`);
+            return;
+        }
+
         alert("Данные успешно обновились!");
         goto("/account/settings");
     }
-    
+
     const infoUpdateBtn = async () => {
         await UpdateInfo();
-    }
-    
+    };
+
     const pwdUpdateBtn = async () => {
         await UpdatePwd();
-    }
+    };
 </script>
 
 <svelte:head>
@@ -159,7 +157,9 @@
                             bind:value={main_email}
                         />
                         <Checkbox>Получать оповещения</Checkbox>
-                        <Checkbox checked>Использовать для подтверждения входа</Checkbox>
+                        <Checkbox checked
+                            >Использовать для подтверждения входа</Checkbox
+                        >
                     </div>
                 </div>
             </form>

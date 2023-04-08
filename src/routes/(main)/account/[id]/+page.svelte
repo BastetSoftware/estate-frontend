@@ -1,5 +1,8 @@
 <script>
-    import { Avatar, Card, Table,
+    import {
+        Avatar,
+        Card,
+        Table,
         TableHead,
         TableBody,
         TableBodyCell,
@@ -9,27 +12,33 @@
     } from "flowbite-svelte";
 
     import { Icon } from "@steeze-ui/svelte-icon";
-    import { Telegram, Discord, Whatsapp } from "@steeze-ui/simple-icons";
-    
+    import {
+        Telegram,
+        Discord,
+        Whatsapp,
+        VK,
+        Viber,
+    } from "@steeze-ui/simple-icons";
+
     import { SendAPICall } from "$lib/API.svelte";
     import { onMount } from "svelte";
-    import { get } from 'svelte/store';
-    
+    import { get } from "svelte/store";
+
     import { storage } from "$lib/Storage";
-    
+
     let name = "";
     let surname = "";
     let patronymic = "";
-    
+
     let login = $page.params.id;
-    import { page } from '$app/stores';
-    
+    import { page } from "$app/stores";
+
     onMount(async () => {
         var accountData = await SendAPICall("user_get_info", {
             Login: login,
-            Token: get(storage).token
+            Token: get(storage).token,
         });
-        
+
         name = accountData.FirstName;
         surname = accountData.LastName;
         if (accountData.Patronymic != "-") {
@@ -115,7 +124,9 @@
                                     >3-й Сетуньский проезд, 8, Москва, 119136</TableBodyCell
                                 >
                                 <TableBodyCell>Управляющий</TableBodyCell>
-                                <TableBodyCell>6 апреля 2023, 15:22</TableBodyCell>
+                                <TableBodyCell
+                                    >6 апреля 2023, 15:22</TableBodyCell
+                                >
                             </TableBodyRow>
                             <TableBodyRow>
                                 <TableBodyCell>Покраска стен</TableBodyCell>
@@ -123,7 +134,9 @@
                                     >3-й Сетуньский проезд, 8, Москва, 119136</TableBodyCell
                                 >
                                 <TableBodyCell>Управляющий</TableBodyCell>
-                                <TableBodyCell>6 апреля 2023, 15:22</TableBodyCell>
+                                <TableBodyCell
+                                    >6 апреля 2023, 15:22</TableBodyCell
+                                >
                             </TableBodyRow>
                             <TableBodyRow>
                                 <TableBodyCell>Покраска стен</TableBodyCell>
@@ -131,7 +144,9 @@
                                     >3-й Сетуньский проезд, 8, Москва, 119136</TableBodyCell
                                 >
                                 <TableBodyCell>Управляющий</TableBodyCell>
-                                <TableBodyCell>6 апреля 2023, 15:22</TableBodyCell>
+                                <TableBodyCell
+                                    >6 апреля 2023, 15:22</TableBodyCell
+                                >
                             </TableBodyRow>
                         </TableBody>
                     </Table>
