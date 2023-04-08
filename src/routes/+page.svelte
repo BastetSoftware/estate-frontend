@@ -7,7 +7,7 @@
 	  </script>
 	
 		<Navbar let:hidden let:toggle>
-			<NavBrand href="/">
+			<NavBrand>
 			  <img
 				src="https://www.alumnirussia.org/ckfinder/userfiles/images/raof/MIREA_Gerb_Colour.jpg"
 				class="mr-3 h-6 sm:h-9"
@@ -18,6 +18,7 @@
 			  </span>
 			</NavBrand>
 		  </Navbar>
+		
 	
 	<style>
 		body {
