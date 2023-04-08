@@ -34,6 +34,9 @@ dependencies:
   date-picker-svelte:
     specifier: ^2.3.0
     version: 2.3.0(svelte@3.58.0)
+  flatpickr:
+    specifier: ^4.6.13
+    version: 4.6.13
   flowbite:
     specifier: ^1.6.4
     version: 1.6.4
@@ -43,6 +46,9 @@ dependencies:
   msgpackr:
     specifier: ^1.8.5
     version: 1.8.5
+  svelte-flatpickr:
+    specifier: ^3.3.2
+    version: 3.3.2(svelte@3.58.0)
   svelte-local-storage-store:
     specifier: ^0.4.0
     version: 0.4.0(svelte@3.58.0)
@@ -524,7 +530,7 @@ packages:
       postcss: ^8.1.0
     dependencies:
       browserslist: 4.21.5
-      caniuse-lite: 1.0.30001474
+      caniuse-lite: 1.0.30001476
       fraction.js: 4.2.0
       normalize-range: 0.1.2
       picocolors: 1.0.0
@@ -560,7 +566,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001474
+      caniuse-lite: 1.0.30001476
       electron-to-chromium: 1.4.356
       node-releases: 2.0.10
       update-browserslist-db: 1.0.10(browserslist@4.21.5)
@@ -587,8 +593,8 @@ packages:
     engines: {node: '>= 6'}
     dev: true
 
-  /caniuse-lite@1.0.30001474:
-    resolution: {integrity: sha512-iaIZ8gVrWfemh5DG3T9/YqarVZoYf0r188IjaGwx68j4Pf0SGY6CQkmJUIE+NZHkkecQGohzXmBGEwWDr9aM3Q==}
+  /caniuse-lite@1.0.30001476:
+    resolution: {integrity: sha512-JmpktFppVSvyUN4gsLS0bShY2L9ZUslHLE72vgemBkS43JD2fOvKTKs+GtRwuxrtRGnwJFW0ye7kWRRlLJS9vQ==}
     dev: true
 
   /chokidar@3.5.3:
@@ -751,6 +757,10 @@ packages:
     dependencies:
       to-regex-range: 5.0.1
     dev: true
+
+  /flatpickr@4.6.13:
+    resolution: {integrity: sha512-97PMG/aywoYpB4IvbvUJi0RQi8vearvU0oov1WW3k0WZPBMrTQVqekSX5CjSG/M4Q3i6A/0FKXC7RyAoAUUSPw==}
+    dev: false
 
   /flowbite-svelte@0.34.7(@popperjs/core@2.11.7)(classnames@2.3.2)(flowbite@1.6.4)(svelte@3.58.0):
     resolution: {integrity: sha512-sgSKGVUrL3niwOJfejc4J4Z546MMNeZ3LGi5G6anVdGd9o0ydekFidXfJa6zrX6EcfCIE4br05FPFq2Q0b21NQ==}
@@ -1392,6 +1402,15 @@ packages:
       - stylus
       - sugarss
     dev: true
+
+  /svelte-flatpickr@3.3.2(svelte@3.58.0):
+    resolution: {integrity: sha512-VNJLYyLRDplI63oWX5hJylzAJc2VhTh3z9SNecfjtuPZmP6FZPpg9Fw7rXpkEV2DPovIWj2PtaVxB6Kp9r423w==}
+    peerDependencies:
+      svelte: ^3.31.0
+    dependencies:
+      flatpickr: 4.6.13
+      svelte: 3.58.0
+    dev: false
 
   /svelte-hmr@0.15.1(svelte@3.58.0):
     resolution: {integrity: sha512-BiKB4RZ8YSwRKCNVdNxK/GfY+r4Kjgp9jCLEy0DuqAKfmQtpL38cQK3afdpjw4sqSs4PLi3jIPJIFp259NkZtA==}

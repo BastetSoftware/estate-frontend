@@ -38,9 +38,11 @@
     "classnames": "^2.3.2",
     "date-fns": "^2.29.3",
     "date-picker-svelte": "^2.3.0",
+    "flatpickr": "^4.6.13",
     "flowbite": "^1.6.4",
     "flowbite-svelte": "^0.34.7",
     "msgpackr": "^1.8.5",
+    "svelte-flatpickr": "^3.3.2",
     "svelte-local-storage-store": "^0.4.0"
   }
 }
