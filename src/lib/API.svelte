@@ -1,7 +1,5 @@
 <script context="module">
-    import { unpackMultiple, unpack, pack } from 'msgpackr';
-    
-    import { onMount } from 'svelte';
+    import { unpack, pack } from 'msgpackr';
     
     export async function SendAPICall(method, args, address="http://localhost:8080/") {
         var query = pack(args);

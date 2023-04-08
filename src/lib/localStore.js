@@ -19,4 +19,4 @@ const createWritableStore = (key, startValue) => {
     };
 }
 
-export const count = createWritableStore('count', 0);
+export const token = createWritableStore('token', 0);
