@@ -1,8 +1,11 @@
 <script>
-    import {
-        Avatar,
-        Card,
-    } from "flowbite-svelte";
+    import { Avatar, Card, Table,
+        TableHead,
+        TableBody,
+        TableBodyCell,
+        TableBodyRow,
+        TableHeadCell,
+        TableSearch, } from "flowbite-svelte";
 
     import { Icon } from "@steeze-ui/svelte-icon";
     import { Telegram, Discord, Whatsapp } from "@steeze-ui/simple-icons";
@@ -33,35 +36,80 @@
     </div>
     <div class="w-full lg:w-2/3 flex flex-col gap-y-3 h-min">
         <Card class="flex grow h-min min-w-full">
-                <div
-                    class="grid grid-cols-1 gap-x-3 gap-y-3 text-zinc-800"
-                >
-                    <div class="flex flex-col gap-y-3">
-                        <div>
-                            <h4>Никитин Иван Сергеевич</h4>
-                            <p>системный администатор</p>
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-y-3">
-                        <div>
-                            <b>Адреса эл. почты</b>
-                            <ul>
-                                <li><a href="mailto:nikitin_ivan@example.com">nikitin_ivan@example.com</a></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <b>Телефоны</b>
-                            <ul>
-                                <li><a href="tel:+79999999999">+79999999999</a></li>
-                            </ul>
-                        </div>
-                        <div class="flex flex-row gap-x-3 gap-y-1">
-                            <Icon src={Telegram} class="w-10"/>
-                            <Icon src={Discord} class="w-10"/>
-                            <Icon src={Whatsapp} class="w-10"/>
-                        </div>
+            <div class="grid grid-cols-1 gap-x-3 gap-y-3 text-zinc-800">
+                <div class="flex flex-col gap-y-3">
+                    <div>
+                        <h4>Никитин Иван Сергеевич</h4>
+                        <p>системный администатор</p>
                     </div>
                 </div>
+                <div class="flex flex-col gap-y-3">
+                    <div>
+                        <b>Адреса эл. почты</b>
+                        <ul>
+                            <li>
+                                <a href="mailto:nikitin_ivan@example.com"
+                                    >nikitin_ivan@example.com</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <b>Телефоны</b>
+                        <ul>
+                            <li><a href="tel:+79999999999">+79999999999</a></li>
+                        </ul>
+                    </div>
+                    <div class="flex flex-row gap-x-3 gap-y-1">
+                        <Icon src={Telegram} class="w-10" />
+                        <Icon src={Discord} class="w-10" />
+                        <Icon src={Whatsapp} class="w-10" />
+                    </div>
+                </div>
+            </div>
+        </Card>
+        <Card class="flex grow h-min min-w-full">
+            <div class="grid grid-cols-1 gap-x-3 gap-y-3 text-zinc-800">
+                <div class="flex flex-col gap-y-3">
+                    <h5>Участие в задачах</h5>
+                </div>
+                <div class="flex flex-col gap-y-3">
+                    <Table shadow>
+                        <TableHead>
+                            <TableHeadCell>Задача</TableHeadCell>
+                            <TableHeadCell>Объект</TableHeadCell>
+                            <TableHeadCell>Роль участника</TableHeadCell>
+                            <TableHeadCell>Дата прикрепления</TableHeadCell>
+                        </TableHead>
+                        <TableBody>
+                            <TableBodyRow>
+                                <TableBodyCell>Покраска стен</TableBodyCell>
+                                <TableBodyCell
+                                    >3-й Сетуньский проезд, 8, Москва, 119136</TableBodyCell
+                                >
+                                <TableBodyCell>Управляющий</TableBodyCell>
+                                <TableBodyCell>6 апреля 2023, 15:22</TableBodyCell>
+                            </TableBodyRow>
+                            <TableBodyRow>
+                                <TableBodyCell>Покраска стен</TableBodyCell>
+                                <TableBodyCell
+                                    >3-й Сетуньский проезд, 8, Москва, 119136</TableBodyCell
+                                >
+                                <TableBodyCell>Управляющий</TableBodyCell>
+                                <TableBodyCell>6 апреля 2023, 15:22</TableBodyCell>
+                            </TableBodyRow>
+                            <TableBodyRow>
+                                <TableBodyCell>Покраска стен</TableBodyCell>
+                                <TableBodyCell
+                                    >3-й Сетуньский проезд, 8, Москва, 119136</TableBodyCell
+                                >
+                                <TableBodyCell>Управляющий</TableBodyCell>
+                                <TableBodyCell>6 апреля 2023, 15:22</TableBodyCell>
+                            </TableBodyRow>
+                        </TableBody>
+                    </Table>
+                </div>
+            </div>
         </Card>
     </div>
 </div>
