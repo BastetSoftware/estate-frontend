@@ -20,6 +20,8 @@
     let name = "";
     let surname = "";
     let patronymic = "";
+    let password = "";
+    let main_email = "";
     
     onMount(async () => {
         var accountData = await SendAPICall("user_get_info", {
@@ -53,8 +55,39 @@
         goto("/account/settings");
     }
     
+    async function UpdatePwd() {
+        if (password == "") {
+            return
+        }
+        
+        // TODO: перенести валидацию пароля на бэкенд
+        if (password.length < 8) {
+            alert("Придумайте пароль длиннее восьми символов.");
+            return
+        }
+        
+        var data = await SendAPICall("user_edit", {
+            Token: get(storage).token,
+            Password: password.toString()
+        });
+        
+        if (data.Code) {
+            alert(
+                `Произошла ошибка (${data.Code}).`
+            );
+            return;
+        }
+        
+        alert("Данные успешно обновились!");
+        goto("/account/settings");
+    }
+    
     const infoUpdateBtn = async () => {
         await UpdateInfo();
+    }
+    
+    const pwdUpdateBtn = async () => {
+        await UpdatePwd();
     }
 </script>
 
@@ -76,7 +109,7 @@
                 class="flex wrap items-center justify-center flex-col grow text-zinc-800"
             >
                 <Avatar size="xl" class="mr-3 mb-3" />
-                <h2>{name} {surname} {patronymic}</h2>
+                <h2>{surname} {name} {patronymic}</h2>
                 <p>системный администратор</p>
                 <p>логин:</p>
                 <pre>{get(storage).login}</pre>
@@ -123,7 +156,7 @@
                             name="email"
                             type="email"
                             label="Основной адрес эл. почты"
-                            value="nikitin_ivan@example.com"
+                            bind:value={main_email}
                         />
                         <Checkbox>Получать оповещения</Checkbox>
                         <Checkbox checked>Использовать для подтверждения входа</Checkbox>
@@ -148,23 +181,15 @@
                         <FloatingLabelInput
                             style="outlined"
                             id="password"
-                            name="password"
+                            name="new_password"
                             type="password"
+                            bind:value={password}
                             label="Новый пароль"
-                        />
-                    </div>
-                    <div class="flex flex-col gap-y-3">
-                        <FloatingLabelInput
-                            style="outlined"
-                            id="old_password"
-                            name="old_password"
-                            type="password"
-                            label="Старый пароль"
                         />
                     </div>
                 </div>
             </form>
-            <Button
+            <Button on:click={pwdUpdateBtn}
                 >Сохранить <Icon
                     src={DocumentArrowUp}
                     class="w-4 ml-1 p-0"

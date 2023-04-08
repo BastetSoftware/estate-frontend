@@ -13,6 +13,7 @@
 
     import { SendAPICall } from "$lib/API.svelte";
     import { goto } from "$app/navigation";
+    import { get } from 'svelte/store'
 
     let loginInput = "";
     let pwdInput = "";
@@ -30,7 +31,17 @@
             return;
         }
 
-        storage.set({ token: data.Token, login: loginInput.toString() });
+        var accountData = await SendAPICall("user_get_info", {
+            Login: loginInput.toString(),
+            Token: data.Token
+        });
+        
+        let whoami = `${accountData.LastName} ${accountData.FirstName[0]}.`;
+        if (accountData.Patronymic != "-") {
+            whoami += ' ' + accountData.Patronymic[0] + '.';
+        }
+        
+        storage.set({ token: data.Token, login: loginInput.toString(), whoami: whoami });
         goto("/");
     }
 
