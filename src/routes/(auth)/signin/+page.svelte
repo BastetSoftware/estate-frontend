@@ -12,7 +12,7 @@
 
 <body>
     <center>
-        <h1 style="color:#17202A text-xl">Регистрация</h1>
+        <h1 style="color:#17202A text-xl">Войти в свой аккаунт</h1>
 
         <form>
             <p style="color:#17202A">
@@ -27,38 +27,17 @@
             </p>
             <p>
                 <input type="text" placeholder="Введите пароль" class="pass" />
-            </p>
 
-            <p style="color:v#17202A">
-                <label for="login">Повторите пароль:</label>
-            </p>
-            <p>
-                <input
-                    type="text"
-                    placeholder="Введите пароль"
-                    class="passom"
-                />
-            </p>
-
-            <p style="color:#17202A">
-                <label for="login">Адрес электронной почты:</label>
-            </p>
-            <p>
-                <input
-                    type="text"
-                    placeholder="Введите адрес электронной почты"
-                    class="email"
-                />
             </p>
             <button
                 type="button"
                 class="text-white uppercase bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                >Зарегистрироваться</button>
-                <p><label for="or">Или</label></p>
-                <button
-                    type="button"
-                    class="text-white uppercase bg-gray-400 hover:bg-gray-500 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Войти</button>
-                <p />
+                >Войти</button>
+            <p />
+            <p><label for="login">Или</label></p>
+            <button
+                type="button"
+                class="text-white uppercase bg-gray-400 hover:bg-gray-500 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Зарегистрироваться</button>
             <p />
         </form>
     </center>
