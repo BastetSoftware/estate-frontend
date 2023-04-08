@@ -29,7 +29,7 @@
 </svelte:head>
 
 <div class="w-full p-5 pb-0">
-    <h1 class="ml-0 mr-3">Объект</h1>
+    <h1 class="ml-0 mr-3">Карточка объекта</h1>
     <p class="m-0 p-0 text-gray-400">просмотр сведений об объекте</p>
 </div>
 <div class="p-5 w-full flex flex-col lg:flex-row gap-x-3 gap-y-3">
@@ -54,7 +54,11 @@
                     </div>
                     <div>
                         <b>Координаты</b>
-                        <p><a href="geo:55.732945,37.535763">55.732945, 37.535763</a></p>
+                        <p>
+                            <a href="geo:55.732945,37.535763"
+                                >55.732945, 37.535763</a
+                            >
+                        </p>
                     </div>
                     <!--<div class="flex flex-row gap-x-3 gap-y-1">
                     </div>-->

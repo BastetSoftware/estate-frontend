@@ -79,7 +79,7 @@
                             value="nikitin_ivan@example.com"
                         />
                         <Checkbox>Получать оповещения</Checkbox>
-                        <Checkbox checked>Сделать почту публичной</Checkbox>
+                        <Checkbox checked>Использовать для подтверждения входа</Checkbox>
                     </div>
                 </div>
             </form>

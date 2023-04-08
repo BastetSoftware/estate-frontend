@@ -19,6 +19,8 @@
     ActivityItem,
     Pagination,
     PaginationItem,
+    SpeedDial,
+    SpeedDialButton
   } from "flowbite-svelte";
 
   import { Icon } from "@steeze-ui/svelte-icon";
@@ -33,6 +35,8 @@
     DocumentText,
     ArrowRightOnRectangle,
     Cog6Tooth,
+    Plus,
+    DocumentCheck
   } from "@steeze-ui/heroicons";
 </script>
 
@@ -45,8 +49,8 @@
       navDivClass="w-full flex flex-col justify-between pt-2 md:pt-0 pb-0 pl-4 pr-4 items-center max-w-full"
     >
       <div class="w-full flex flex-row justify-between items-center max-w-full">
-        <NavBrand>
-          <b class="text-xl text-bolder">Bastet System</b>
+        <NavBrand href="/">
+            <img alt="" class="w-12 h-12" src="/logo.svg"/>
         </NavBrand>
         <div class="flex flex-row gap-4">
           <NavUl>
@@ -56,13 +60,16 @@
             <NavLi href="/object/list" class="flex items-center min-w-fit"
               ><Icon src={HomeModern} class="w-6 pr-2 p-0" /> Объекты</NavLi
             >
-            <NavLi href="/" class="flex items-center min-w-fit"
+            <NavLi href="/task/list" class="flex items-center min-w-fit"
               ><Icon src={DocumentText} class="w-6 pr-2 p-0" /> Задачи</NavLi
             >
-            <NavLi href="/" class="flex items-center min-w-fit"
+            <NavLi href="/report/list" class="flex items-center min-w-fit"
+              ><Icon src={DocumentCheck} class="w-6 pr-2 p-0" /> Отчёты</NavLi
+            >
+            <NavLi href="/account/list" class="flex items-center min-w-fit"
               ><Icon src={Users} class="w-6 pr-2 p-0" /> Люди</NavLi
             >
-            <NavLi href="/" class="flex items-center min-w-fit"
+            <NavLi href="/help" class="flex items-center min-w-fit"
               ><Icon src={QuestionMarkCircle} class="w-6 pr-2 p-0" /> Справка</NavLi
             >
           </NavUl>
@@ -102,13 +109,16 @@
           <NavLi href="/object/list" class="flex items-center min-w-fit"
             ><Icon src={HomeModern} class="w-6 pr-2 p-0" /> Объекты</NavLi
           >
-          <NavLi href="/" class="flex items-center min-w-fit"
+          <NavLi href="/task/list" class="flex items-center min-w-fit"
             ><Icon src={DocumentText} class="w-6 pr-2 p-0" /> Задачи</NavLi
           >
-          <NavLi href="/" class="flex items-center min-w-fit"
+          <NavLi href="/report/list" class="flex items-center min-w-fit"
+              ><Icon src={DocumentCheck} class="w-6 pr-2 p-0" /> Отчёты</NavLi
+            >
+          <NavLi href="/account/list" class="flex items-center min-w-fit"
             ><Icon src={Users} class="w-6 pr-2 p-0" /> Люди</NavLi
           >
-          <NavLi href="/" class="flex items-center min-w-fit"
+          <NavLi href="/help" class="flex items-center min-w-fit"
             ><Icon src={QuestionMarkCircle} class="w-6 pr-2 p-0" /> Справка</NavLi
           >
         </NavUl>
@@ -119,5 +129,17 @@
         <slot />
       </div>
     </div>
+    <SpeedDial defaultClass="fixed right-6 bottom-6">
+        <Icon slot="icon" src={Plus} class="w-6" />
+        <SpeedDialButton name="Новый объект..." href='/object/new'>
+            <Icon src={HomeModern} class="w-6 h-6" theme="solid" />
+        </SpeedDialButton>
+        <SpeedDialButton name="Новая задача..." href="/task/new">
+            <Icon src={DocumentText} class="w-6 h-6" theme="solid" />
+        </SpeedDialButton>
+        <SpeedDialButton name="Новый отчёт..." href="/task/new">
+            <Icon src={DocumentCheck} class="w-6 h-6" theme="solid" />
+        </SpeedDialButton>
+    </SpeedDial>
   </main>
 </div>
