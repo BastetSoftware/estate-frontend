@@ -4,11 +4,12 @@
     import { Button } from "flowbite-svelte";
     
     async function Ping() {
-        alert(await SendAPICall("ping", {}))
+        var data = await SendAPICall("ping", {});
+        alert(data)
     }
     
-    const pingBtn = () => {
-        Ping();
+    const pingBtn = async () => {
+        await Ping();
     }
 </script>
 
