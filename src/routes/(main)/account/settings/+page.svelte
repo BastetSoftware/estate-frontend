@@ -15,7 +15,7 @@
     import { get } from 'svelte/store';
     
     import { storage } from "$lib/Storage";
-    import { refresh } from "$app/navigation";
+    import { goto } from "$app/navigation";
     
     let name = "";
     let surname = "";
@@ -50,7 +50,7 @@
         }
         
         alert("Данные успешно обновились!");
-        refresh();
+        goto("/account/settings");
     }
     
     const infoUpdateBtn = async () => {
@@ -76,10 +76,10 @@
                 class="flex wrap items-center justify-center flex-col grow text-zinc-800"
             >
                 <Avatar size="xl" class="mr-3 mb-3" />
-                <h2>Никитин Иван Сергеевич</h2>
+                <h2>{name} {surname} {patronymic}</h2>
                 <p>системный администратор</p>
                 <p>логин:</p>
-                <pre>nikitin_ivan</pre>
+                <pre>{get(storage).login}</pre>
             </div>
         </Card>
     </div>

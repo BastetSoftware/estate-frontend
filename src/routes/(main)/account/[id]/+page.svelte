@@ -5,7 +5,8 @@
         TableBodyCell,
         TableBodyRow,
         TableHeadCell,
-        TableSearch, } from "flowbite-svelte";
+        TableSearch,
+    } from "flowbite-svelte";
 
     import { Icon } from "@steeze-ui/svelte-icon";
     import { Telegram, Discord, Whatsapp } from "@steeze-ui/simple-icons";
@@ -20,9 +21,12 @@
     let surname = "";
     let patronymic = "";
     
+    let login = $page.params.id;
+    import { page } from '$app/stores';
+    
     onMount(async () => {
         var accountData = await SendAPICall("user_get_info", {
-            Login: get(storage).login,
+            Login: login,
             Token: get(storage).token
         });
         
@@ -53,7 +57,7 @@
                 <h2>{name} {surname} {patronymic}</h2>
                 <p>системный администратор</p>
                 <p>логин:</p>
-                <pre>{get(storage).login}</pre>
+                <pre>{login}</pre>
             </div>
         </Card>
     </div>
