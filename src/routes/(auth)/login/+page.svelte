@@ -1,5 +1,5 @@
 <script>
-    import { token } from "$lib/Storage";
+    import { storage } from "$lib/Storage";
 
     import { Button, Dropdown, DropdownItem, Chevron } from "flowbite-svelte";
     import {
@@ -10,31 +10,33 @@
         NavHamburger,
     } from "flowbite-svelte";
     import { BottomNav, BottomNavItem } from "flowbite-svelte";
-    
+
     import { SendAPICall } from "$lib/API.svelte";
-    import { goto } from '$app/navigation';
-    
+    import { goto } from "$app/navigation";
+
     let loginInput = "";
     let pwdInput = "";
-    
+
     async function Login() {
         var data = await SendAPICall("user_log_in", {
             Login: loginInput.toString(),
-            Password: pwdInput.toString()
+            Password: pwdInput.toString(),
         });
-        
+
         if (data.Code) {
-            alert(`Произошла ошибка входа (${data.Code}). Проверьте правильность учётных данных.`);
-            return
+            alert(
+                `Произошла ошибка входа (${data.Code}). Проверьте правильность учётных данных.`
+            );
+            return;
         }
-        
-        token.set({value: data.Token});
-        goto('/');
+
+        storage.set({ token: data.Token, login: loginInput.toString() });
+        goto("/");
     }
-    
+
     const loginBtn = async () => {
         await Login();
-    }
+    };
 </script>
 
 <body>
@@ -43,29 +45,42 @@
 
         <form>
             <p style="color:#17202A">
-                <label for="login">Логин:</label>
+                <label for="username">Логин:</label>
             </p>
             <p>
-                <input type="text" placeholder="Введите логин" class="login" bind:value="{loginInput}"/>
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Введите логин"
+                    class="pass"
+                    bind:value={loginInput}
+                />
             </p>
 
             <p style="color:#17202A">
                 <label for="login">Пароль:</label>
             </p>
             <p>
-                <input type="text" placeholder="Введите пароль" class="pass" bind:value="{pwdInput}"/>
-
+                <input
+                    type="password"
+                    placeholder="Введите пароль"
+                    class="pass"
+                    bind:value={pwdInput}
+                />
             </p>
             <button
                 type="button"
                 on:click={loginBtn}
                 class="text-white uppercase bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                >Войти</button>
+                >Войти</button
+            >
             <p />
-            <p><label for="login">Или</label></p>
+            <p>Или</p>
             <button
                 type="button"
-                class="text-white uppercase bg-gray-400 hover:bg-gray-500 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Зарегистрироваться</button>
+                class="text-white uppercase bg-gray-400 hover:bg-gray-500 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                >Зарегистрироваться</button
+            >
             <p />
         </form>
     </center>

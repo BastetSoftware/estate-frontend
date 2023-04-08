@@ -9,6 +9,29 @@
 
     import { Icon } from "@steeze-ui/svelte-icon";
     import { Telegram, Discord, Whatsapp } from "@steeze-ui/simple-icons";
+    
+    import { SendAPICall } from "$lib/API.svelte";
+    import { onMount } from "svelte";
+    import { get } from 'svelte/store';
+    
+    import { storage } from "$lib/Storage";
+    
+    let name = "";
+    let surname = "";
+    let patronymic = "";
+    
+    onMount(async () => {
+        var accountData = await SendAPICall("user_get_info", {
+            Login: get(storage).login,
+            Token: get(storage).token
+        });
+        
+        name = accountData.FirstName;
+        surname = accountData.LastName;
+        if (accountData.Patronymic != "-") {
+            patronymic = accountData.Patronymic;
+        }
+    });
 </script>
 
 <svelte:head>
@@ -27,10 +50,10 @@
                 class="flex wrap items-center justify-center flex-col grow text-zinc-800"
             >
                 <Avatar size="xl" class="mr-3 mb-3" />
-                <h2>Никитин Иван Сергеевич</h2>
+                <h2>{name} {surname} {patronymic}</h2>
                 <p>системный администратор</p>
                 <p>логин:</p>
-                <pre>nikitin_ivan</pre>
+                <pre>{get(storage).login}</pre>
             </div>
         </Card>
     </div>
@@ -39,7 +62,7 @@
             <div class="grid grid-cols-1 gap-x-3 gap-y-3 text-zinc-800">
                 <div class="flex flex-col gap-y-3">
                     <div>
-                        <h4>Никитин Иван Сергеевич</h4>
+                        <h4>{name} {surname} {patronymic}</h4>
                         <p>системный администатор</p>
                     </div>
                 </div>

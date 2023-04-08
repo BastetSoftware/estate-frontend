@@ -41,22 +41,22 @@
     
     import { SendAPICall } from "$lib/API.svelte";
     import { goto } from '$app/navigation';
-    import { token } from '$lib/Storage.js'
+    import { storage } from '$lib/Storage.js'
     import { onMount } from "svelte";
     import { get } from 'svelte/store'
     
     onMount(() => {
-        if (get(token).value == undefined) {
+        if (get(storage).token == undefined) {
             goto('/login');
         }
     });
     
     async function Logout() {
         var data = await SendAPICall("user_log_out", {
-            Token: get(token)
+            Token: get(storage).token
         });
         
-        token.set({});
+        storage.set({});
         goto('/login');
     }
     
@@ -128,7 +128,7 @@
                         </DropdownHeader>
                         <DropdownItem
                             class="flex items-center flex-row gap-x-2"
-                            href="/account/"
+                            href="/account/{get(storage).login}"
                             ><Icon src={User} class="w-6" /> Профиль</DropdownItem
                         >
                         <DropdownItem
@@ -137,7 +137,7 @@
                             ><Icon src={Cog6Tooth} class="w-6" /> Настройки</DropdownItem
                         >
                         <DropdownDivider />
-                        <DropdownItem on:click={logoutBtn} class="flex items-center flex-row gap-x-2"
+                        <DropdownItem on:click={logoutBtn} class="text-red-500 flex items-center flex-row gap-x-2"
                             ><Icon src={ArrowRightOnRectangle} class="w-6"/> Выйти</DropdownItem
                         >
                     </Dropdown>

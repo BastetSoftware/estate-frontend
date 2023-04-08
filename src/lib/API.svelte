@@ -8,7 +8,10 @@
         
         let response = await fetch(address, {
             method: 'POST',
-            body: query
+            body: query,
+            headers: {
+                "Access-Control-Allow-Origin": "*"
+            }
         });
         
         if (response.ok) {

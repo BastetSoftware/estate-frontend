@@ -9,6 +9,53 @@
 
     import { Icon } from "@steeze-ui/svelte-icon";
     import { DocumentArrowUp, PlusCircle, Trash } from "@steeze-ui/heroicons";
+    
+    import { SendAPICall } from "$lib/API.svelte";
+    import { onMount } from "svelte";
+    import { get } from 'svelte/store';
+    
+    import { storage } from "$lib/Storage";
+    import { refresh } from "$app/navigation";
+    
+    let name = "";
+    let surname = "";
+    let patronymic = "";
+    
+    onMount(async () => {
+        var accountData = await SendAPICall("user_get_info", {
+            Login: get(storage).login,
+            Token: get(storage).token
+        });
+        
+        name = accountData.FirstName;
+        surname = accountData.LastName;
+        if (accountData.Patronymic != "-") {
+            patronymic = accountData.Patronymic;
+        }
+    });
+    
+    async function UpdateInfo() {
+        var data = await SendAPICall("user_edit", {
+            Token: get(storage).token,
+            FirstName: name.toString(),
+            LastName: surname.toString(),
+            Patronymic: patronymic.toString(),
+        });
+        
+        if (data.Code) {
+            alert(
+                `Произошла ошибка (${data.Code}).`
+            );
+            return;
+        }
+        
+        alert("Данные успешно обновились!");
+        refresh();
+    }
+    
+    const infoUpdateBtn = async () => {
+        await UpdateInfo();
+    }
 </script>
 
 <svelte:head>
@@ -50,7 +97,7 @@
                             name="floating_outlined"
                             type="text"
                             label="Фамилия"
-                            value="Никитин"
+                            bind:value={surname}
                         />
                         <FloatingLabelInput
                             style="outlined"
@@ -58,7 +105,7 @@
                             name="floating_outlined"
                             type="text"
                             label="Имя"
-                            value="Иван"
+                            bind:value={name}
                         />
                         <FloatingLabelInput
                             style="outlined"
@@ -66,7 +113,7 @@
                             name="floating_outlined"
                             type="text"
                             label="Отчество"
-                            value="Сергеевич"
+                            bind:value={patronymic}
                         />
                     </div>
                     <div class="flex flex-col gap-y-3">
@@ -83,7 +130,7 @@
                     </div>
                 </div>
             </form>
-            <Button
+            <Button on:click={infoUpdateBtn}
                 >Сохранить <Icon
                     src={DocumentArrowUp}
                     class="w-4 ml-1 p-0"
