@@ -8,6 +8,36 @@
         NavHamburger,
     } from "flowbite-svelte";
     import { BottomNav, BottomNavItem } from "flowbite-svelte";
+
+    import {
+        Avatar,
+        Card,
+        Carousel,
+        CarouselTransition,
+        Table,
+        TableHead,
+        TableBody,
+        TableBodyCell,
+        TableBodyRow,
+        TableHeadCell,
+        TableSearch,
+    } from "flowbite-svelte";
+
+    import { Icon } from "@steeze-ui/svelte-icon";
+    import { Telegram, Discord, Whatsapp } from "@steeze-ui/simple-icons";
+
+    let images = [
+        {
+            id: 0,
+            name: "Вид снаружи",
+        },
+        {
+            id: 1,
+            name: "Фотография 2",
+        },
+    ];
+
+    let showThumbs = false;
 </script>
 
 <body>
@@ -100,3 +130,4 @@
         width: 300px;
     }
 </style>
+
