@@ -17,23 +17,16 @@
     } from "flowbite-svelte";
 
     import { Icon } from "@steeze-ui/svelte-icon";
-    import { Folder, DocumentArrowUp, DocumentText } from "@steeze-ui/heroicons";
+    import {
+        Folder,
+        DocumentArrowUp,
+        DocumentText,
+    } from "@steeze-ui/heroicons";
     import { Telegram, Discord, Whatsapp } from "@steeze-ui/simple-icons";
 
-    let images = [
-        {
-            id: 0,
-            name: "Вид снаружи",
-        },
-        {
-            id: 1,
-            name: "Фотография 2",
-        },
-    ];
-
+    let images = [];
     let showThumbs = false;
 
-    let selected;
     let countries = [
         { value: "us", name: "United States" },
         { value: "ca", name: "Canada" },
@@ -41,8 +34,7 @@
     ];
 
     let files;
-
-    let name = "";
+    let name;
     let type;
     let desc;
     let district;
@@ -52,7 +44,41 @@
     let address;
     let state;
     let actual_user;
-    let obj_type;
+
+    import { SendAPICall } from "$lib/API.svelte";
+    import { goto } from "$app/navigation";
+    import { get } from "svelte/store";
+    import { storage } from "$lib/Storage";
+
+    async function SubmitObject() {
+        var data = await SendAPICall("object_create", {
+            Token: get(storage).token,
+            Name: name.toString(),
+            Description: desc.toString(),
+            District: district.toString(),
+            Region: region.toString(),
+            Address: address.toString(),
+            Area: parseInt(area.toString()),
+            Type: type.toString(),
+            State: state.toString(),
+            Owner: owner.toString(),
+            Actual_user: actual_user.toString(),
+            Gid: 2,
+            Permissions: 255
+        });
+
+        if (data.Code) {
+            alert(`Произошла ошибка (${data.Code}).`);
+            return;
+        }
+
+        alert("Данные успешно обновились!");
+        goto(`/object/${data.Id}`);
+    }
+
+    const submitBtn = async () => {
+        await SubmitObject();
+    };
 </script>
 
 <svelte:head>
@@ -79,6 +105,14 @@
                 <div
                     class="grid grid-cols-1 lg:grid-cols-2 pt-3 gap-x-3 gap-y-3 text-zinc-800"
                 >
+                    <Input
+                        placeholder="Название"
+                        id="name"
+                        defaultClass="lg:col-span-2"
+                        name="name"
+                        type="text"
+                        bind:value={name}
+                    />
                     <div class="flex flex-col gap-y-3">
                         <Input
                             placeholder="Адрес"
@@ -100,7 +134,7 @@
                         <Select
                             placeholder="Тип объекта"
                             items={countries}
-                            bind:value={obj_type}
+                            bind:value={type}
                         />
                     </div>
                     <div class="flex flex-col gap-y-3">
@@ -127,7 +161,7 @@
                         />
                         <Input
                             placeholder="Фактический пользователь"
-                            id="obj_user"
+                            id="actual_user"
                             name="floating_outlined"
                             type="text"
                             bind:value={actual_user}
@@ -139,7 +173,7 @@
                         bind:value={desc}
                         class="lg:col-span-2"
                     />
-                    <Button class="lg:col-span-2"
+                    <Button on:click={submitBtn} class="lg:col-span-2"
                         >Внести в базу <Icon
                             src={DocumentArrowUp}
                             class="w-4 ml-1 p-0"

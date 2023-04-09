@@ -8,7 +8,6 @@
         TableBodyCell,
         TableBodyRow,
         TableHeadCell,
-        TableSearch,
     } from "flowbite-svelte";
 
     import { Icon } from "@steeze-ui/svelte-icon";
@@ -16,14 +15,13 @@
         Telegram,
         Discord,
         Whatsapp,
-        VK,
         Viber,
     } from "@steeze-ui/simple-icons";
 
     import { SendAPICall } from "$lib/API.svelte";
     import { onMount } from "svelte";
     import { get } from "svelte/store";
-
+    import { page } from "$app/stores";
     import { storage } from "$lib/Storage";
 
     let name = "";
@@ -31,7 +29,6 @@
     let patronymic = "";
 
     let login = $page.params.id;
-    import { page } from "$app/stores";
 
     onMount(async () => {
         var accountData = await SendAPICall("user_get_info", {
