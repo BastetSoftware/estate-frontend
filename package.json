@@ -38,6 +38,7 @@
     "classnames": "^2.3.2",
     "date-fns": "^2.29.3",
     "date-picker-svelte": "^2.3.0",
+    "fast-xml-parser": "^4.2.0",
     "flatpickr": "^4.6.13",
     "flowbite": "^1.6.4",
     "flowbite-svelte": "^0.34.7",

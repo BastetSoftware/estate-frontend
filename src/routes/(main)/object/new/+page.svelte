@@ -14,6 +14,8 @@
         ListgroupItem,
         Helper,
         Textarea,
+        Modal,
+        Spinner,
     } from "flowbite-svelte";
 
     import { Icon } from "@steeze-ui/svelte-icon";
@@ -21,8 +23,10 @@
         Folder,
         DocumentArrowUp,
         DocumentText,
+        Trash,
+        PlusCircle
     } from "@steeze-ui/heroicons";
-    import { Telegram, Discord, Whatsapp } from "@steeze-ui/simple-icons";
+    import { Telegram, Discord, Whatsapp, E } from "@steeze-ui/simple-icons";
 
     let images = [];
     let showThumbs = false;
@@ -33,17 +37,29 @@
         { value: "fr", name: "France" },
     ];
 
-    let files;
-    let name;
-    let type;
-    let desc;
-    let district;
-    let region;
-    let area;
-    let owner;
-    let address;
-    let state;
-    let actual_user;
+    class Structure {
+        constructor(arg = {}) {
+            this.files = [];
+                this.name = "";
+                this.type = "";
+                this.desc = "";
+                this.district = "";
+                this.region = "";
+                this.area = {};
+                this.owner = "";
+                this.address = "";
+                this.state = "";
+                this.actual_user = "";
+            
+            if (arg != {}) {
+                for (var attrname in arg) {
+                    this[attrname] = arg[attrname];
+                }
+            }
+        }
+    }
+
+    let structures = [new Structure()];
 
     import { SendAPICall } from "$lib/API.svelte";
     import { goto } from "$app/navigation";
@@ -51,161 +67,277 @@
     import { storage } from "$lib/Storage";
 
     async function SubmitObject() {
-        var data = await SendAPICall("object_create", {
-            Token: get(storage).token,
-            Name: name.toString(),
-            Description: desc.toString(),
-            District: district.toString(),
-            Region: region.toString(),
-            Address: address.toString(),
-            Area: parseInt(area.toString()),
-            Type: type.toString(),
-            State: state.toString(),
-            Owner: owner.toString(),
-            Actual_user: actual_user.toString(),
-            Gid: 2,
-            Permissions: 255
-        });
+        var length = structures.length,
+            element = null;
+        for (var i = 0; i < length; i++) {
+            element = structures[i];
+            var data = await SendAPICall("object_create", {
+                Token: get(storage).token,
+                Name: element.name.toString(),
+                Description: element.desc.toString(),
+                District: element.district.toString(),
+                Region: element.region.toString(),
+                Address: element.address.toString(),
+                Area: parseInt(element.area.toString()),
+                Type: element.type.toString(),
+                State: element.state.toString(),
+                Owner: element.owner.toString(),
+                Actual_user: element.actual_user.toString(),
+                Gid: 2,
+                Permissions: 255,
+            });
 
-        if (data.Code) {
-            alert(`Произошла ошибка (${data.Code}).`);
-            return;
+            if (data.Code) {
+                alert(`Произошла ошибка (${data.Code}).`);
+                return;
+            }
         }
 
-        alert("Данные успешно обновились!");
-        goto(`/object/${data.Id}`);
+        alert("Данные успешно отправлены!");
+        goto(`/object/list`);
     }
 
     const submitBtn = async () => {
         await SubmitObject();
     };
+
+    import { XMLParser } from "fast-xml-parser";
+
+    let xmlModal = false;
+    let xmlLoad = 0;
+    let xmlSuccess = true;
+    let xmlFile = {};
+    const xmlBtn = () => {
+        xmlModal = true;
+    };
+
+    function parseXML() {
+        xmlLoad = 1;
+
+        let parser = new XMLParser();
+        let file = xmlFile[0];
+        let reader = new FileReader();
+
+        reader.readAsText(file);
+        reader.onload = function () {
+            let objs = parser.parse(reader.result);
+
+            structures = [];
+            objs.Objects.Object.forEach((element) => {
+                structures.push(
+                    new Structure({
+                        files: [],
+                        name: element.Name,
+                        type: element.Type,
+                        desc: element.Desc,
+                        district: element.District,
+                        region: element.Region,
+                        area: element.Area,
+                        owner: element.Owner,
+                        address: element.Address,
+                        state: element.State,
+                        actual_user: element.Actual_user,
+                    })
+                );
+            });
+
+            xmlLoad = 2;
+            xmlSuccess = true;
+        };
+
+        reader.onerror = function () {
+            console.log(reader.error);
+            xmlLoad = 2;
+            xmlSuccess = false;
+        };
+    }
+    
+    function addStructure() {
+        structures.push(new Structure({}));
+        structures = structures;
+    }
 </script>
+
+<Modal title="Импорт данных" bind:open={xmlModal} permanent>
+    <div class:hidden={xmlLoad != 0}>
+        <Fileupload bind:files={xmlFile} />
+        <Button on:click={() => parseXML()}>Обработать</Button>
+    </div>
+    <div class:hidden={xmlLoad != 1}>
+        <Spinner class="mb-2" />
+        <p>Обрабатываем данные. Это займёт немного времени...</p>
+    </div>
+    <div class:hidden={xmlLoad != 2}>
+        <p class:hidden={xmlSuccess}>
+            Произошла ошибка во время импорта данных.
+        </p>
+        <p class:hidden={!xmlSuccess}>Отлично! Данные загружены.</p>
+    </div>
+    <svelte:fragment slot="footer">
+        <div class:hidden={xmlLoad == 1}>
+            <Button
+                on:click={() => {
+                    xmlLoad = 0;
+                    xmlFile = {};
+                    xmlSuccess = true;
+                    xmlModal = false;
+                }}>Закрыть</Button
+            >
+        </div>
+    </svelte:fragment>
+</Modal>
 
 <svelte:head>
     <title>Home</title>
     <meta name="description" content="Svelte demo app" />
 </svelte:head>
 
-<div class="w-full p-5 pb-0">
-    <h1 class="ml-0 mr-3">Добавление объектов</h1>
-    <p class="m-0 p-0 text-gray-400">
-        внесение в базу данных, импорт .XML-файлов
-    </p>
+<div
+    class="w-full p-5 pb-0 grid grid-cols-1 lg:grid-cols-2 items-center gap-y-3"
+>
+    <div>
+        <h1 class="ml-0 mr-3">Добавление объектов</h1>
+        <p class="m-0 p-0 text-gray-400">
+            внесение в базу данных, импорт .XML-файлов
+        </p>
+    </div>
+    <div class="grid grid-cols-2 gap-x-3">
+        <Button on:click={xmlBtn} color="dark" class="w-full"
+            >Заполнить из .XML-файла <Icon
+                src={DocumentText}
+                class="w-4 ml-1 p-0"
+            /></Button
+        >
+        <Button on:click={submitBtn}
+            >Внести в базу <Icon
+                src={DocumentArrowUp}
+                class="w-4 ml-1 p-0"
+            /></Button
+        >
+    </div>
 </div>
-<div class="p-5 w-full flex flex-col lg:flex-row gap-x-3 gap-y-3">
-    <div class="w-full lg:w-1/2 flex flex-col gap-y-3 h-min">
-        <Card class="flex grow h-min min-w-full">
-            <form>
-                <Button class="bg-gray-500 w-full"
-                    >Заполнить из .XML-файла <Icon
-                        src={DocumentText}
-                        class="w-4 ml-1 p-0"
-                    /></Button
-                >
-                <div
-                    class="grid grid-cols-1 lg:grid-cols-2 pt-3 gap-x-3 gap-y-3 text-zinc-800"
-                >
-                    <Input
-                        placeholder="Название"
-                        id="name"
-                        defaultClass="lg:col-span-2"
-                        name="name"
-                        type="text"
-                        bind:value={name}
-                    />
-                    <div class="flex flex-col gap-y-3">
-                        <Input
-                            placeholder="Адрес"
-                            id="address"
-                            name="floating_outlined"
-                            type="text"
-                            bind:value={address}
-                        />
-                        <Select
-                            placeholder="Регион"
-                            items={countries}
-                            bind:value={region}
-                        />
-                        <Select
-                            placeholder="Округ"
-                            items={countries}
-                            bind:value={district}
-                        />
-                        <Select
-                            placeholder="Тип объекта"
-                            items={countries}
-                            bind:value={type}
-                        />
-                    </div>
-                    <div class="flex flex-col gap-y-3">
-                        <Input
-                            placeholder="Площадь (м²)"
-                            id="area"
-                            name="floating_outlined"
-                            type="number"
-                            bind:value={area}
-                        />
-                        <Input
-                            placeholder="Состояние"
-                            id="state"
-                            name="floating_outlined"
-                            type="text"
-                            bind:value={state}
-                        />
-                        <Input
-                            placeholder="Собственник"
-                            id="owner"
-                            name="floating_outlined"
-                            type="text"
-                            bind:value={owner}
-                        />
-                        <Input
-                            placeholder="Фактический пользователь"
-                            id="actual_user"
-                            name="floating_outlined"
-                            type="text"
-                            bind:value={actual_user}
-                        />
-                    </div>
-                    <Textarea
-                        id="desc"
-                        placeholder="Описание"
-                        bind:value={desc}
-                        class="lg:col-span-2"
-                    />
-                    <Button on:click={submitBtn} class="lg:col-span-2"
-                        >Внести в базу <Icon
-                            src={DocumentArrowUp}
-                            class="w-4 ml-1 p-0"
-                        /></Button
+<div class="p-5 w-full grid grid-cols-1 gap-x-3 gap-y-12">
+    {#each structures as strct, i}
+        <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-y-3 gap-x-3">
+            <Card class="flex grow h-min min-w-full">
+                <form>
+                    <div
+                        class="grid grid-cols-1 lg:grid-cols-2 pt-3 gap-x-3 gap-y-3 text-zinc-800"
                     >
-                </div>
-            </form>
-        </Card>
-    </div>
-    <div class="w-full lg:w-1/2 flex flex-col gap-y-3 h-min">
-        <Card class="flex grow h-min min-w-full">
-            <form>
-                <div class="grid grid-cols-1 gap-x-3 gap-y-3 text-zinc-800">
-                    <div class="flex flex-col gap-y-3">
-                        <h4>Прикрепление файлов</h4>
-                        <Fileupload id="multiple_files" multiple bind:files />
-                        <Helper
-                            >Что поддерживается:<br />— картинки (.JPEG, .PNG),<br
-                            />— видеоролики (MP4, AVI, MOV),<br />— документы
-                            (.DOCX, .DOC, .ODT, .PDF),<br />— таблицы (.XLS,
-                            .XLSX)</Helper
-                        >
-                        <Listgroup items={files} let:item class="mt-2">
-                            {#if item}
-                                {item.name}
-                            {:else}
-                                <ListgroupItem>Файлов нет.</ListgroupItem>
-                            {/if}
-                        </Listgroup>
+                        <div class="flex flex-row gap-x-3 w-full lg:col-span-2">
+                            <div class="w-full">
+                                <Input
+                            placeholder="Название"
+                            id="name"
+                            name="name"
+                            type="text"
+                            bind:value={strct.name}
+                        />
+                            </div>
+                            
+                        <Button color="red" on:click={() => {structures.splice(i,1); console.log(structures); structures = structures;}}><Icon src={Trash} class="w-4"/></Button>
+                        </div>
+                        
+                        <div class="flex flex-col gap-y-3">
+                            <Input
+                                placeholder="Адрес"
+                                id="address"
+                                name="floating_outlined"
+                                type="text"
+                                bind:value={strct.address}
+                            />
+                            <Select
+                                placeholder="Регион"
+                                items={countries}
+                                bind:value={strct.region}
+                            />
+                            <Select
+                                placeholder="Округ"
+                                items={countries}
+                                bind:value={strct.district}
+                            />
+                            <Select
+                                placeholder="Тип объекта"
+                                items={countries}
+                                bind:value={strct.type}
+                            />
+                        </div>
+                        <div class="flex flex-col gap-y-3">
+                            <Input
+                                placeholder="Площадь (м²)"
+                                id="area"
+                                name="floating_outlined"
+                                type="number"
+                                bind:value={strct.area}
+                            />
+                            <Input
+                                placeholder="Состояние"
+                                id="state"
+                                name="floating_outlined"
+                                type="text"
+                                bind:value={strct.state}
+                            />
+                            <Input
+                                placeholder="Собственник"
+                                id="owner"
+                                name="floating_outlined"
+                                type="text"
+                                bind:value={strct.owner}
+                            />
+                            <Input
+                                placeholder="Фактический пользователь"
+                                id="actual_user"
+                                name="floating_outlined"
+                                type="text"
+                                bind:value={strct.actual_user}
+                            />
+                        </div>
+                        <Textarea
+                            id="desc"
+                            placeholder="Описание"
+                            bind:value={strct.desc}
+                            class="lg:col-span-2"
+                        />
                     </div>
-                </div>
-            </form>
-        </Card>
-    </div>
+                </form>
+            </Card>
+            <Card class="flex h-min min-w-full">
+                <form>
+                    <div class="grid grid-cols-1 gap-x-3 gap-y-3 text-zinc-800">
+                        <div class="flex flex-col gap-y-3">
+                            <h4>Прикрепление файлов</h4>
+                            <Fileupload
+                                id="multiple_files"
+                                multiple
+                                bind:value={strct.files}
+                            />
+                            <Helper
+                                >Что поддерживается:<br />— картинки (.JPEG,
+                                .PNG),<br />— видеоролики (MP4, AVI, MOV),<br
+                                />— документы (.DOCX, .DOC, .ODT, .PDF),<br />—
+                                таблицы (.XLS, .XLSX)</Helper
+                            >
+                            <Listgroup
+                                items={strct.files}
+                                let:item
+                                class="mt-2"
+                            >
+                                {#if item}
+                                    {item.name}
+                                {:else}
+                                    <ListgroupItem>Файлов нет.</ListgroupItem>
+                                {/if}
+                            </Listgroup>
+                        </div>
+                    </div>
+                </form>
+            </Card>
+        </div>
+    {/each}
+</div>
+<div class="w-full flex justify-center">
+    <Button on:click={() => addStructure()}>Добавить<Icon
+        src={PlusCircle}
+        class="w-4 ml-1 p-0"
+    /></Button>
 </div>

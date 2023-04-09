@@ -1,9 +1,13 @@
-<!DOCTYPE html>
-<!-- svelte-ignore a11y-missing-attribute -->
-<html>
-  <head>
-    <meta charset="utf-8">
+
     <style>
+        h1 {
+        margin-block-start: 20px;
+        margin-block-end: 32px;
+    }
+
+    a {
+        margin-block-end: 42px;
+    }
       #okno {
         width: 1000px;
         height: 500px;
@@ -124,9 +128,6 @@
       }
       .close:hover {background: #FDFEFE;}
     </style>
-  </head>
- 
-  <body>
    
     <div id="okno">
       Зарегистрировать объект<br>
@@ -185,22 +186,4 @@
             <img class="object-cover w-full rounded-t-lg h-382 md:h-auto md:w-96 md:rounded-none md:rounded-l-lg" src="https://quietest.ru/images/pages/kontakti/kontakti.jpg" alt="">
         </a>
     
-        <body>
-            
-        </body>
-    
     </center>
-  </body>
-</html>
-
-
-<style>
-    h1 {
-        margin-block-start: 20px;
-        margin-block-end: 32px;
-    }
-
-    a {
-        margin-block-end: 42px;
-    }
-</style>
