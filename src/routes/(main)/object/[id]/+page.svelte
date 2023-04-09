@@ -93,7 +93,7 @@
                     <h4>Общая информация</h4>
                 </div>
                 <Table>
-                    <TableBody class="divide-y">
+                    <TableBody>
                         <TableBodyRow>
                             <TableBodyCell
                                 ><p class="font-bold">Адрес</p></TableBodyCell

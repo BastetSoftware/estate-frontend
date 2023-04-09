@@ -73,7 +73,7 @@
                 State: element.state.toString(),
                 Owner: element.owner.toString(),
                 Actual_user: element.actual_user.toString(),
-                Gid: 2,
+                Gid: 1,
                 Permissions: 255,
             });
 
@@ -225,7 +225,7 @@
                         />
                             </div>
                             
-                        <Button color="red" on:click={() => {structures.splice(i,1); console.log(structures); structures = structures;}}><Icon src={Trash} class="w-4"/></Button>
+                        <Button color="red" on:click={() => {structures.splice(i,1); structures = structures;}}><Icon src={Trash} class="w-4"/></Button>
                         </div>
                         
                         <div class="flex flex-col gap-y-3">

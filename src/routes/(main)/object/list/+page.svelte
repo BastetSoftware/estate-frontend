@@ -14,20 +14,50 @@
     } from "flowbite-svelte";
 
     import { Icon } from "@steeze-ui/svelte-icon";
-    import { Telegram, Discord, Whatsapp } from "@steeze-ui/simple-icons";
 
-    let images = [
-        {
-            id: 0,
-            name: "Вид снаружи",
-        },
-        {
-            id: 1,
-            name: "Фотография 2",
-        },
-    ];
+    import { SendAPICall } from "$lib/API.svelte";
+    import { onMount } from "svelte";
+    import { get } from "svelte/store";
+    //import { page } from "$app/stores";
+    import { storage } from "$lib/Storage";
 
-    let showThumbs = false;
+    class Structure {
+        constructor(arg = {}) {
+            this.files = [];
+            this.name = "";
+            this.type = "";
+            this.desc = "";
+            this.district = "";
+            this.region = "";
+            this.area = {};
+            this.owner = "";
+            this.address = "";
+            this.state = "";
+            this.actual_user = "";
+
+            if (arg != {}) {
+                for (var attrname in arg) {
+                    this[attrname] = arg[attrname];
+                }
+            }
+        }
+    }
+
+    let objs = [];
+
+    onMount(async () => {
+        var objData = await SendAPICall("find_object", {
+            Token: get(storage).token,
+            Limit: 50,
+        });
+
+        if (objData.Code) {
+            alert(`Произошла ошибка (${objData.Code}).`);
+            return;
+        }
+
+        objs = objData.Structures;
+    });
 </script>
 
 <svelte:head>
@@ -43,47 +73,31 @@
     <div class="w-full">
         <Table shadow>
             <TableHead>
+                <TableHeadCell>Название</TableHeadCell>
                 <TableHeadCell>Адрес</TableHeadCell>
-                <TableHeadCell>Координаты</TableHeadCell>
-                <TableHeadCell>Тип</TableHeadCell>
-                <TableHeadCell>Дата добавления</TableHeadCell>
+                <TableHeadCell>Район</TableHeadCell>
+                <TableHeadCell>Округ</TableHeadCell>
+                <TableHeadCell>Тип объекта</TableHeadCell>
+                <TableHeadCell>Площадь</TableHeadCell>
+                <TableHeadCell>Состояние</TableHeadCell>
+                <TableHeadCell>Собственник</TableHeadCell>
+                <TableHeadCell>Фактич. пользователь</TableHeadCell>
             </TableHead>
             <TableBody>
-                <TableBodyRow>
-                    <TableBodyCell
-                        >3-й Сетуньский проезд, 8, Москва, 119136</TableBodyCell
-                    >
-                    <TableBodyCell
-                        ><a href="geo:55.732945,37.535763"
-                            >55.732945, 37.535763</a
-                        ></TableBodyCell
-                    >
-                    <TableBodyCell>Многоквартирный дом</TableBodyCell>
-                    <TableBodyCell>6 апреля 2023, 15:22</TableBodyCell>
-                </TableBodyRow>
-                <TableBodyRow>
-                    <TableBodyCell
-                        >3-й Сетуньский проезд, 8, Москва, 119136</TableBodyCell
-                    >
-                    <TableBodyCell
-                        ><a href="geo:55.732945,37.535763"
-                            >55.732945, 37.535763</a
-                        ></TableBodyCell
-                    >
-                    <TableBodyCell>Многоквартирный дом</TableBodyCell>
-                    <TableBodyCell>6 апреля 2023, 15:22</TableBodyCell>
-                </TableBodyRow><TableBodyRow>
-                    <TableBodyCell
-                        >3-й Сетуньский проезд, 8, Москва, 119136</TableBodyCell
-                    >
-                    <TableBodyCell
-                        ><a href="geo:55.732945,37.535763"
-                            >55.732945, 37.535763</a
-                        ></TableBodyCell
-                    >
-                    <TableBodyCell>Многоквартирный дом</TableBodyCell>
-                    <TableBodyCell>6 апреля 2023, 15:22</TableBodyCell>
-                </TableBodyRow>
+                {#each objs as strct}
+                    <TableBodyRow>
+                        <TableBodyCell><a href="/object/{strct.Id}">{strct.Name}</a></TableBodyCell>
+                        <TableBodyCell>{strct.Address}</TableBodyCell>
+                        <TableBodyCell>{strct.Region}</TableBodyCell>
+                        <TableBodyCell>{strct.District}</TableBodyCell>
+                        <TableBodyCell>{strct.Type}</TableBodyCell>
+                        <TableBodyCell>{strct.Area} м²</TableBodyCell>
+                        <TableBodyCell>{strct.State}</TableBodyCell>
+                        <TableBodyCell>{strct.Owner}</TableBodyCell>
+                        <TableBodyCell>{strct.Actual_user}</TableBodyCell>
+                    </TableBodyRow>
+                {/each}
+                <!---->
             </TableBody>
         </Table>
     </div>
