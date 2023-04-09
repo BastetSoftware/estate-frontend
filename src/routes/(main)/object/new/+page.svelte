@@ -1,13 +1,8 @@
 <script>
     import {
-        Avatar,
         Card,
-        Carousel,
-        CarouselTransition,
-        FloatingLabelInput,
         Button,
         Select,
-        Label,
         Input,
         Fileupload,
         Listgroup,
@@ -20,16 +15,11 @@
 
     import { Icon } from "@steeze-ui/svelte-icon";
     import {
-        Folder,
         DocumentArrowUp,
         DocumentText,
         Trash,
         PlusCircle
     } from "@steeze-ui/heroicons";
-    import { Telegram, Discord, Whatsapp, E } from "@steeze-ui/simple-icons";
-
-    let images = [];
-    let showThumbs = false;
 
     let countries = [
         { value: "us", name: "United States" },

@@ -47,7 +47,7 @@
     
     onMount(() => {
         if (get(storage).token == undefined) {
-            //goto('/login');
+            goto('/login');
         }
     });
     
@@ -57,7 +57,7 @@
         });
         
         storage.set({});
-        //goto('/login');
+        goto('/login');
     }
     
     const logoutBtn = async () => {
