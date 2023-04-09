@@ -120,12 +120,6 @@
                         />
                     </div>
                     <Dropdown placement="bottom" triggeredBy="#avatar-menu">
-                        <DropdownHeader>
-                            <b
-                                ><span class="block text-sm">Никитин И. С.</span
-                                ></b
-                            >
-                        </DropdownHeader>
                         <DropdownItem
                             class="flex items-center flex-row gap-x-2"
                             href="/account/{get(storage).login}"

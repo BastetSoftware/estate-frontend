@@ -10,7 +10,8 @@
             method: 'POST',
             body: query,
             headers: {
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Request-Headers": "Content-Type, x-requested-with",
+                "Access-Control-Request-Method": "POST"
             }
         });
         

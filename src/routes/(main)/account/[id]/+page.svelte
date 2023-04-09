@@ -1,35 +1,41 @@
 <script>
-    import { Avatar, Card, Table,
+    import {
+        Avatar,
+        Card,
+        Table,
         TableHead,
         TableBody,
         TableBodyCell,
         TableBodyRow,
         TableHeadCell,
-        TableSearch,
     } from "flowbite-svelte";
 
     import { Icon } from "@steeze-ui/svelte-icon";
-    import { Telegram, Discord, Whatsapp } from "@steeze-ui/simple-icons";
-    
+    import {
+        Telegram,
+        Discord,
+        Whatsapp,
+        Viber,
+    } from "@steeze-ui/simple-icons";
+
     import { SendAPICall } from "$lib/API.svelte";
     import { onMount } from "svelte";
-    import { get } from 'svelte/store';
-    
+    import { get } from "svelte/store";
+    import { page } from "$app/stores";
     import { storage } from "$lib/Storage";
-    
+
     let name = "";
     let surname = "";
     let patronymic = "";
-    
+
     let login = $page.params.id;
-    import { page } from '$app/stores';
-    
+
     onMount(async () => {
         var accountData = await SendAPICall("user_get_info", {
             Login: login,
-            Token: get(storage).token
+            Token: get(storage).token,
         });
-        
+
         name = accountData.FirstName;
         surname = accountData.LastName;
         if (accountData.Patronymic != "-") {
@@ -54,7 +60,7 @@
                 class="flex wrap items-center justify-center flex-col grow text-zinc-800"
             >
                 <Avatar size="xl" class="mr-3 mb-3" />
-                <h2>{name} {surname} {patronymic}</h2>
+                <h2>{surname} {name} {patronymic}</h2>
                 <p>системный администратор</p>
                 <p>логин:</p>
                 <pre>{login}</pre>
@@ -66,7 +72,7 @@
             <div class="grid grid-cols-1 gap-x-3 gap-y-3 text-zinc-800">
                 <div class="flex flex-col gap-y-3">
                     <div>
-                        <h4>{name} {surname} {patronymic}</h4>
+                        <h4>{surname} {name} {patronymic}</h4>
                         <p>системный администатор</p>
                     </div>
                 </div>
@@ -115,7 +121,9 @@
                                     >3-й Сетуньский проезд, 8, Москва, 119136</TableBodyCell
                                 >
                                 <TableBodyCell>Управляющий</TableBodyCell>
-                                <TableBodyCell>6 апреля 2023, 15:22</TableBodyCell>
+                                <TableBodyCell
+                                    >6 апреля 2023, 15:22</TableBodyCell
+                                >
                             </TableBodyRow>
                             <TableBodyRow>
                                 <TableBodyCell>Покраска стен</TableBodyCell>
@@ -123,7 +131,9 @@
                                     >3-й Сетуньский проезд, 8, Москва, 119136</TableBodyCell
                                 >
                                 <TableBodyCell>Управляющий</TableBodyCell>
-                                <TableBodyCell>6 апреля 2023, 15:22</TableBodyCell>
+                                <TableBodyCell
+                                    >6 апреля 2023, 15:22</TableBodyCell
+                                >
                             </TableBodyRow>
                             <TableBodyRow>
                                 <TableBodyCell>Покраска стен</TableBodyCell>
@@ -131,7 +141,9 @@
                                     >3-й Сетуньский проезд, 8, Москва, 119136</TableBodyCell
                                 >
                                 <TableBodyCell>Управляющий</TableBodyCell>
-                                <TableBodyCell>6 апреля 2023, 15:22</TableBodyCell>
+                                <TableBodyCell
+                                    >6 апреля 2023, 15:22</TableBodyCell
+                                >
                             </TableBodyRow>
                         </TableBody>
                     </Table>
