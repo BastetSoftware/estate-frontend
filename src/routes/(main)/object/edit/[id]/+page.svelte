@@ -88,21 +88,6 @@
     async function SubmitObject() {
 
         var element = structures[0];
-        console.log({
-                Token: get(storage).token,
-                Name: element.name.toString(),
-                Description: element.desc.toString(),
-                District: element.district.toString(),
-                Region: element.region.toString(),
-                Address: element.address.toString(),
-                Area: parseInt(element.area.toString()),
-                Type: element.type.toString(),
-                State: element.state.toString(),
-                Owner: element.owner.toString(),
-                Actual_user: element.actual_user.toString(),
-                Gid: 1,
-                Permissions: 255,
-            });
         var data = await SendAPICall(
             "object_change",
             {
