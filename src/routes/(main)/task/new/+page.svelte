@@ -104,17 +104,6 @@
             element = null;
         for (var i = 0; i < length; i++) {
             element = tasks[i];
-            console.log({
-                Token: get(storage).token,
-                Name: element.name.toString(),
-                Description: element.desc.toString(),
-                Deadline: parseInt(new Date(element.deadline.toString()).getTime().toString()),
-                Status: element.status.toString(),
-                Object: parseInt(element.object.toString()),
-                Maintainer: parseInt(element.maintainer.toString()),
-                Gid: 1,
-                Permissions: 0b00111111,
-            });
             var data = await SendAPICall("task_create", {
                 Token: get(storage).token,
                 Name: element.name.toString(),
@@ -126,18 +115,6 @@
                 Gid: 1,
                 Permissions: 0b00111111,
             }, `http://${$page.url.hostname}:8080/`);
-
-           /*type ArgsFTaskCreate struct {
-	Token       string
-	Name        string
-	Description string
-	Deadline    int64
-	Status      string
-	Object      int64
-	Maintainer  int64
-	Gid         int64
-	Permissions uint8
-}*/
             
             if (data.Code) {
                 alert(`Произошла ошибка (${data.Code}).`);
@@ -146,7 +123,7 @@
         }
 
         alert("Данные успешно отправлены!");
-        goto(`/tasks/list`);
+        goto(`/task/list`);
     }
 
     function addTask() {

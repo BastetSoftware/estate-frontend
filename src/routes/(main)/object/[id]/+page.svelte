@@ -8,13 +8,20 @@
         TableBody,
         TableBodyCell,
         TableBodyRow,
+        Button
     } from "flowbite-svelte";
 
     import { Icon } from "@steeze-ui/svelte-icon";
-    import { Telegram, Discord, Whatsapp } from "@steeze-ui/simple-icons";
+    import {
+        DocumentArrowUp,
+        DocumentText,
+        Trash,
+        PlusCircle,
+    } from "@steeze-ui/heroicons";
 
     import { SendAPICall } from "$lib/API.svelte";
     import { onMount } from "svelte";
+    import { goto } from "$app/navigation";
     import { get } from "svelte/store";
     import { page } from "$app/stores";
     import { storage } from "$lib/Storage";
@@ -65,6 +72,20 @@
         state = objData.State;
         actual_user = objData.Actual_user;
     });
+    
+    const deleteBtn = async () => {
+        var objData = await SendAPICall("object_delete", {
+            Id: parseInt($page.params.id),
+            Token: get(storage).token,
+        }, `http://${$page.url.hostname}:8080/`);
+
+        if (objData.Code) {
+            alert(`Произошла ошибка (${objData.Code}).`);
+            return;
+        }
+        
+        goto('/object/list');
+    }
 </script>
 
 <svelte:head>
@@ -79,9 +100,15 @@
 <div class="p-5 w-full flex flex-col lg:flex-row gap-x-3 gap-y-3">
     <div class="w-full lg:w-1/2">
         <Card class="h-min text-zinc-800 min-w-full">
-            <div class="text-zinc-800">
-                <h4>{name}</h4>
-                <p>{address}</p>
+            <div class="flex flex-row gap-x-3 w-full lg:col-span-2 text-zinc-800">
+                <div class="w-full">
+                    <h4>{name}</h4>
+                    <p>{address}</p>
+                </div>
+                <Button
+                    color="red"
+                    on:click={deleteBtn}><Icon src={Trash} class="w-4" /></Button
+                >
             </div>
             <Carousel {images} {showThumbs} />
         </Card>
