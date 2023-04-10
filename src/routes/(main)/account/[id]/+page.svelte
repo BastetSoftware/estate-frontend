@@ -34,7 +34,7 @@
         var accountData = await SendAPICall("user_get_info", {
             Login: login,
             Token: get(storage).token,
-        });
+        }, `http://${$page.url.hostname}:8080/`);
 
         name = accountData.FirstName;
         surname = accountData.LastName;

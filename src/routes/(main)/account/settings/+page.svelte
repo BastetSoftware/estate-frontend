@@ -44,7 +44,7 @@
             FirstName: name.toString(),
             LastName: surname.toString(),
             Patronymic: patronymic.toString(),
-        });
+        }, `http://${$page.url.hostname}:8080/`);
 
         if (data.Code) {
             alert(`Произошла ошибка (${data.Code}).`);
@@ -55,6 +55,8 @@
         goto("/account/settings");
     }
 
+    import { page } from "$app/stores";
+    
     async function UpdatePwd() {
         if (password == "") {
             return;
@@ -69,7 +71,7 @@
         var data = await SendAPICall("user_edit", {
             Token: get(storage).token,
             Password: password.toString(),
-        });
+        }, `http://${$page.url.hostname}:8080/`);
 
         if (data.Code) {
             alert(`Произошла ошибка (${data.Code}).`);

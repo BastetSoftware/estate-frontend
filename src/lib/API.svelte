@@ -1,7 +1,7 @@
 <script context="module">
     import { unpack, pack } from 'msgpackr';
     
-    export async function SendAPICall(method, args, address="http://localhost:8080/") {
+    export async function SendAPICall(method, args, address=`http://localhost:8080/`) {
         var query = pack(args);
         
         address += "api/" + method;

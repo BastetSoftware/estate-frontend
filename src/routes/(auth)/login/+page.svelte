@@ -22,7 +22,7 @@
         var data = await SendAPICall("user_log_in", {
             Login: loginInput.toString(),
             Password: pwdInput.toString(),
-        });
+        }, `http://${$page.url.hostname}:8080/`);
 
         if (data.Code) {
             alert(
@@ -34,7 +34,7 @@
         var accountData = await SendAPICall("user_get_info", {
             Login: loginInput.toString(),
             Token: data.Token,
-        });
+        }, `http://${$page.url.hostname}:8080/`);
 
         storage.set({
             token: data.Token,
@@ -43,6 +43,8 @@
         goto("/");
     }
 
+    import { page } from "$app/stores";
+    
     const loginBtn = async () => {
         await Login();
     };

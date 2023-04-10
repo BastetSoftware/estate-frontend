@@ -16,6 +16,12 @@
     } from "flowbite-svelte";
 
     import { Icon } from "@steeze-ui/svelte-icon";
+    import {
+        DocumentArrowDown,
+        DocumentText,
+        Trash,
+        PlusCircle
+    } from "@steeze-ui/heroicons";
 
     import { SendAPICall } from "$lib/API.svelte";
     import { onMount } from "svelte";
@@ -48,13 +54,13 @@
     }
 
     let objs = [];
-
+    
     async function loadObjs() {
         var objData = await SendAPICall("find_object", {
             Token: get(storage).token,
             Limit: 20,
             Offset: 20*page
-        });
+        }, `http://${$page.url.hostname}:8080/`);
 
         if (objData.Code) {
             alert(`Произошла ошибка (${objData.Code}).`);
@@ -106,7 +112,7 @@
                 <TableHeadCell>ID</TableHeadCell>
                 <TableHeadCell>Название</TableHeadCell>
                 <TableHeadCell>Адрес</TableHeadCell>
-                <TableHeadCell>Район</TableHeadCell>
+                <TableHeadCell>Регион</TableHeadCell>
                 <TableHeadCell>Округ</TableHeadCell>
                 <TableHeadCell>Тип объекта</TableHeadCell>
                 <TableHeadCell>Площадь</TableHeadCell>

@@ -10,155 +10,265 @@
         Label,
         Input,
         Textarea,
+        Modal,
+        Fileupload,
+        Spinner,
     } from "flowbite-svelte";
 
     import { Icon } from "@steeze-ui/svelte-icon";
-    import { Folder, DocumentArrowUp } from "@steeze-ui/heroicons";
-    import { Telegram, Discord, Whatsapp } from "@steeze-ui/simple-icons";
+    import {
+        DocumentArrowUp,
+        DocumentText,
+        Trash,
+        PlusCircle,
+    } from "@steeze-ui/heroicons";
 
-    let images = [
-        {
-            id: 0,
-            name: "Вид снаружи",
-        },
-        {
-            id: 1,
-            name: "Фотография 2",
-        },
-    ];
+    import { DateInput, localeFromDateFnsLocale } from "date-picker-svelte";
+    let date = new Date();
+    import { ru } from "date-fns/locale";
+    let locale = localeFromDateFnsLocale(ru);
 
-    let showThumbs = false;
-
-    let selected;
     let countries = [
         { value: "us", name: "United States" },
         { value: "ca", name: "Canada" },
         { value: "fr", name: "France" },
     ];
 
-    let title;
-    let desc;
-    let status;
-    let obj;
-    let maintaner;
-
-    let deadline = new Date();
-
-    import Flatpickr from "svelte-flatpickr";
-
-    import "flatpickr/dist/flatpickr.css";
-    import { Russian } from "flatpickr/dist/l10n/ru.js";
-
-    const flatpickrOptions = {
-        enableTime: true,
-        dateFormat: "Срок сдачи: d.m.Y, H:i",
-        locale: Russian,
-        element: "#my-picker",
+    let xmlModal = false;
+    let xmlLoad = 0;
+    let xmlSuccess = true;
+    let xmlFile = {};
+    const xmlBtn = () => {
+        xmlModal = true;
     };
+
+    class Task {
+        constructor(arg = {}) {
+            this.name = "";
+            this.desc = "";
+            this.deadline = new Date();
+            this.status = "";
+            this.object = 0;
+            this.maintaner = 0;
+            this.gid = 0;
+            this.permissions = 0b00110000;
+
+            if (arg != {}) {
+                for (var attrname in arg) {
+                    this[attrname] = arg[attrname];
+                }
+            }
+        }
+    }
+
+    let tasks = [new Task()];
+
+    function parseXML() {
+        xmlLoad = 1;
+
+        let parser = new XMLParser();
+        let file = xmlFile[0];
+        let reader = new FileReader();
+
+        reader.readAsText(file);
+        reader.onload = function () {
+            let tasks = parser.parse(reader.result);
+
+            tasks = [];
+            tasks.Objects.Object.forEach((element) => {
+            });
+
+            xmlLoad = 2;
+            xmlSuccess = true;
+        };
+
+        reader.onerror = function () {
+            console.log(reader.error);
+            xmlLoad = 2;
+            xmlSuccess = false;
+        };
+    }
+
+    const submitBtn = async () => {
+        await SubmitTask();
+    };
+    
+    import { SendAPICall } from "$lib/API.svelte";
+    import { goto } from "$app/navigation";
+    import { get } from "svelte/store";
+    import { storage } from "$lib/Storage";
+    import { page } from "$app/stores";
+    
+    async function SubmitTask() {
+        var length = tasks.length,
+            element = null;
+        for (var i = 0; i < length; i++) {
+            element = tasks[i];
+            var data = await SendAPICall("task_create", {
+                Token: get(storage).token,
+                Name: element.name.toString(),
+                Description: element.desc.toString(),
+                Deadline: new Date(element.deadline.toString()).getTime(),
+                Status: element.status.toString(),
+                Object: parseInt(element.object.toString()),
+                Maintaner: parseInt(element.maintaner.toString()),
+                Gid: 1,
+                Permissions: 255,
+            }, `http://${$page.url.hostname}:8080/`);
+
+            if (data.Code) {
+                alert(`Произошла ошибка (${data.Code}).`);
+                return;
+            }
+        }
+
+        alert("Данные успешно отправлены!");
+        goto(`/tasks/list`);
+    }
+
+    function addTask() {
+        tasks.push(new Task({}));
+        tasks = tasks;
+    }
 </script>
+
+<Modal title="Импорт данных" bind:open={xmlModal} permanent>
+    <div class:hidden={xmlLoad != 0}>
+        <Fileupload bind:files={xmlFile} />
+        <Button on:click={() => {/*parseXML()*/}}>Обработать</Button>
+    </div>
+    <div class:hidden={xmlLoad != 1}>
+        <Spinner class="mb-2" />
+        <p>Обрабатываем данные. Это займёт немного времени...</p>
+    </div>
+    <div class:hidden={xmlLoad != 2}>
+        <p class:hidden={xmlSuccess}>
+            Произошла ошибка во время импорта данных.
+        </p>
+        <p class:hidden={!xmlSuccess}>Отлично! Данные загружены.</p>
+    </div>
+    <svelte:fragment slot="footer">
+        <div class:hidden={xmlLoad == 1}>
+            <Button
+                on:click={() => {
+                    xmlLoad = 0;
+                    xmlFile = {};
+                    xmlSuccess = true;
+                    xmlModal = false;
+                }}>Закрыть</Button
+            >
+        </div>
+    </svelte:fragment>
+</Modal>
 
 <svelte:head>
     <title>Home</title>
     <meta name="description" content="Svelte demo app" />
 </svelte:head>
 
-<div class="w-full p-5 pb-0">
-    <h1 class="ml-0 mr-3">Добавление задачи</h1>
-    <p class="m-0 p-0 text-gray-400">
-        внесение в базу данных, импорт .XML-файлов
-    </p>
+<div
+    class="w-full p-5 pb-0 grid grid-cols-1 lg:grid-cols-2 items-center gap-y-3"
+>
+    <div>
+        <h1 class="ml-0 mr-3">Добавление задачи</h1>
+        <p class="m-0 p-0 text-gray-400">
+            внесение в базу данных, импорт .XML-файлов
+        </p>
+    </div>
+    <div class="grid grid-cols-2 gap-x-3">
+        <Button on:click={xmlBtn} color="dark" class="w-full"
+            >Заполнить из .XML-файла <Icon
+                src={DocumentText}
+                class="w-4 ml-1 p-0"
+            /></Button
+        >
+        <Button on:click={submitBtn}
+            >Внести в базу <Icon
+                src={DocumentArrowUp}
+                class="w-4 ml-1 p-0"
+            /></Button
+        >
+    </div>
 </div>
-<div class="p-5 w-full flex flex-col lg:flex-row gap-x-3 gap-y-3">
-    <div class="w-full lg:w-3/5 flex flex-col gap-y-3 h-min">
-        <Card class="flex grow h-min min-w-full">
-            <form>
-                <Button class="bg-gray-500 w-full"
-                    >Заполнить из .XML-файла <Icon
-                        src={DocumentArrowUp}
-                        class="w-4 ml-1 p-0"
-                    /></Button
-                >
-                <div
-                    class="grid grid-cols-1 lg:grid-cols-2 pt-3 gap-x-3 gap-y-3 text-zinc-800"
-                >
-                    <Input
-                        placeholder="Заголовок"
-                        id="title"
-                        defaultClass="lg:col-span-2"
-                        name="title"
-                        type="text"
-                        bind:value={title}
-                    />
-                    <div class="flex flex-col gap-y-3">
-                        <Select
-                            placeholder="Округ"
-                            items={countries}
-                            bind:value={selected}
-                        />
-                        <Input
-                            id="maintaner"
-                            name="floating_outlined"
-                            type="text"
-                            placeholder="Ответственный"
-                            bind:value={maintaner}
-                        />
-                    </div>
-                    <div class="flex flex-col gap-y-3">
-                        <Input
-                            id="obj"
-                            name="floating_outlined"
-                            type="text"
-                            placeholder="Объект"
-                            bind:value={obj}
-                        />
-                        <Flatpickr
-                            options={flatpickrOptions}
-                            bind:value={deadline}
-                            element="#my-picker"
-                        >
-                            <div class="flatpickr" id="my-picker">
-                                <input
-                                    type="text"
-                                    placeholder="Select Date.."
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    data-input
-                                />
-
-                                <a
-                                    class="input-button"
-                                    title="clear"
-                                    data-clear
-                                    href
-                                >
-                                    <i class="icon-close" />
-                                </a>
-                            </div>
-                        </Flatpickr>
-                    </div>
-                    <Button class="lg:col-span-2"
-                        >Внести в базу <Icon
-                            src={DocumentArrowUp}
-                            class="w-4 ml-1 p-0"
-                        /></Button
+<div class="p-5 w-full grid grid-cols-1 gap-x-3 gap-y-12">
+    {#each tasks as task, i}
+        <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-y-3 gap-x-3">
+            <Card class="flex grow h-min min-w-full">
+                <form>
+                    <div
+                        class="grid grid-cols-1 lg:grid-cols-2 gap-x-3 gap-y-3 text-zinc-800"
                     >
-                </div>
-            </form>
-        </Card>
-    </div>
-    <div class="w-full lg:w-2/5 flex flex-col gap-y-3 h-min">
-        <Card class="flex grow h-min min-w-full">
-            <form>
-                <div
-                    class="grid grid-cols-1 lg:grid-cols-2 gap-x-3 gap-y-3 text-zinc-800"
-                >
-                    <Textarea
-                        id="desc"
-                        placeholder="Описание"
-                        bind:value={desc}
-                        class="lg:col-span-2"
-                    />
-                </div>
-            </form>
-        </Card>
-    </div>
+                        <div class="flex flex-row gap-x-3 w-full lg:col-span-2">
+                            <div class="w-full">
+                                <Input
+                                    placeholder="Название"
+                                    id="name"
+                                    name="name"
+                                    type="text"
+                                    bind:value={task.name}
+                                />
+                            </div>
+
+                            <Button
+                                color="red"
+                                on:click={() => {
+                                    tasks.splice(i, 1);
+                                    tasks = tasks;
+                                }}><Icon src={Trash} class="w-4" /></Button
+                            >
+                        </div>
+                        <div class="flex flex-col gap-y-3">
+                            <Select
+                                placeholder="Статус"
+                                items={countries}
+                                bind:value={task.status}
+                            />
+                            <Input
+                                id="maintaner"
+                                name="floating_outlined"
+                                type="number"
+                                placeholder="Ответственный"
+                                bind:value={task.maintaner}
+                            />
+                        </div>
+                        <div class="flex flex-col gap-y-3">
+                            <Input
+                                id="obj"
+                                name="floating_outlined"
+                                type="number"
+                                placeholder="Объект"
+                                bind:value={task.object}
+                            />
+                            <Input
+                                id="obj"
+                                name="floating_outlined"
+                                type="date"
+                                placeholder="Срок сдачи"
+                                bind:value={task.deadline}
+                            />
+                        </div>
+                    </div>
+                </form>
+            </Card>
+            <Card class="flex grow h-min min-w-full">
+                <form>
+                    <div
+                        class="grid grid-cols-1 lg:grid-cols-2 gap-x-3 gap-y-3 text-zinc-800"
+                    >
+                        <Textarea
+                            id="desc"
+                            placeholder="Описание"
+                            bind:value={task.desc}
+                            class="lg:col-span-2"
+                        />
+                    </div>
+                </form>
+            </Card>
+        </div>
+    {/each}
+</div>
+<div class="w-full flex justify-center mb-3">
+    <Button on:click={() => addTask()}
+        >Добавить<Icon src={PlusCircle} class="w-4 ml-1 p-0" /></Button
+    >
 </div>

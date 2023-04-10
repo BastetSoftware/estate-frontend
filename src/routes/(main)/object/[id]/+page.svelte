@@ -47,7 +47,7 @@
         var objData = await SendAPICall("object_get_info", {
             Id: parseInt($page.params.id),
             Token: get(storage).token,
-        });
+        }, `http://${$page.url.hostname}:8080/`);
 
         if (objData.Code) {
             alert(`Произошла ошибка (${objData.Code}).`);
@@ -108,7 +108,7 @@
                         </TableBodyRow>
                         <TableBodyRow>
                             <TableBodyCell
-                                ><p class="font-bold">Район</p></TableBodyCell
+                                ><p class="font-bold">Регион</p></TableBodyCell
                             >
                             <TableBodyCell>{region}</TableBodyCell>
                         </TableBodyRow>

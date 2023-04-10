@@ -51,10 +51,12 @@
         }
     });
     
+    import { page } from "$app/stores";
+    
     async function Logout() {
         var data = await SendAPICall("user_log_out", {
             Token: get(storage).token
-        });
+        }, `http://${$page.url.hostname}:8080/`);
         
         storage.set({});
         goto('/login');

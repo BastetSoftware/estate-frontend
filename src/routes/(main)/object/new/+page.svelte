@@ -18,7 +18,7 @@
         DocumentArrowUp,
         DocumentText,
         Trash,
-        PlusCircle
+        PlusCircle,
     } from "@steeze-ui/heroicons";
 
     let countries = [
@@ -30,17 +30,17 @@
     class Structure {
         constructor(arg = {}) {
             this.files = [];
-                this.name = "";
-                this.type = "";
-                this.desc = "";
-                this.district = "";
-                this.region = "";
-                this.area = {};
-                this.owner = "";
-                this.address = "";
-                this.state = "";
-                this.actual_user = "";
-            
+            this.name = "";
+            this.type = "";
+            this.desc = "";
+            this.district = "";
+            this.region = "";
+            this.area = {};
+            this.owner = "";
+            this.address = "";
+            this.state = "";
+            this.actual_user = "";
+
             if (arg != {}) {
                 for (var attrname in arg) {
                     this[attrname] = arg[attrname];
@@ -55,7 +55,8 @@
     import { goto } from "$app/navigation";
     import { get } from "svelte/store";
     import { storage } from "$lib/Storage";
-
+    import { page } from "$app/stores";
+    
     async function SubmitObject() {
         var length = structures.length,
             element = null;
@@ -75,7 +76,7 @@
                 Actual_user: element.actual_user.toString(),
                 Gid: 1,
                 Permissions: 255,
-            });
+            }, `http://${$page.url.hostname}:8080/`);
 
             if (data.Code) {
                 alert(`Произошла ошибка (${data.Code}).`);
@@ -141,7 +142,7 @@
             xmlSuccess = false;
         };
     }
-    
+
     function addStructure() {
         structures.push(new Structure({}));
         structures = structures;
@@ -217,17 +218,23 @@
                         <div class="flex flex-row gap-x-3 w-full lg:col-span-2">
                             <div class="w-full">
                                 <Input
-                            placeholder="Название"
-                            id="name"
-                            name="name"
-                            type="text"
-                            bind:value={strct.name}
-                        />
+                                    placeholder="Название"
+                                    id="name"
+                                    name="name"
+                                    type="text"
+                                    bind:value={strct.name}
+                                />
                             </div>
-                            
-                        <Button color="red" on:click={() => {structures.splice(i,1); structures = structures;}}><Icon src={Trash} class="w-4"/></Button>
+
+                            <Button
+                                color="red"
+                                on:click={() => {
+                                    structures.splice(i, 1);
+                                    structures = structures;
+                                }}><Icon src={Trash} class="w-4" /></Button
+                            >
                         </div>
-                        
+
                         <div class="flex flex-col gap-y-3">
                             <Input
                                 placeholder="Адрес"
@@ -325,9 +332,8 @@
         </div>
     {/each}
 </div>
-<div class="w-full flex justify-center">
-    <Button on:click={() => addStructure()}>Добавить<Icon
-        src={PlusCircle}
-        class="w-4 ml-1 p-0"
-    /></Button>
+<div class="w-full flex justify-center mb-3">
+    <Button on:click={() => addStructure()}
+        >Добавить<Icon src={PlusCircle} class="w-4 ml-1 p-0" /></Button
+    >
 </div>
