@@ -49,7 +49,7 @@
             this.deadline = new Date();
             this.status = "";
             this.object = 0;
-            this.maintaner = 0;
+            this.maintainer = 0;
             this.gid = 0;
             this.permissions = 0b00110000;
 
@@ -104,6 +104,17 @@
             element = null;
         for (var i = 0; i < length; i++) {
             element = tasks[i];
+            console.log({
+                Token: get(storage).token,
+                Name: element.name.toString(),
+                Description: element.desc.toString(),
+                Deadline: parseInt(new Date(element.deadline.toString()).getTime().toString()),
+                Status: element.status.toString(),
+                Object: parseInt(element.object.toString()),
+                Maintainer: parseInt(element.maintainer.toString()),
+                Gid: 1,
+                Permissions: 0b11111111,
+            });
             var data = await SendAPICall("task_create", {
                 Token: get(storage).token,
                 Name: element.name.toString(),
@@ -111,7 +122,7 @@
                 Deadline: parseInt(new Date(element.deadline.toString()).getTime().toString()),
                 Status: element.status.toString(),
                 Object: parseInt(element.object.toString()),
-                Maintainer: parseInt(element.maintaner.toString()),
+                Maintainer: parseInt(element.maintainer.toString()),
                 Gid: 1,
                 Permissions: 0b11111111,
             }, `http://${$page.url.hostname}:8080/`);
@@ -236,11 +247,11 @@
                                 bind:value={task.status}
                             />
                             <Input
-                                id="maintaner"
+                                id="maintainer"
                                 name="floating_outlined"
                                 type="number"
                                 placeholder="Ответственный"
-                                bind:value={task.maintaner}
+                                bind:value={task.maintainer}
                             />
                         </div>
                         <div class="flex flex-col gap-y-3">

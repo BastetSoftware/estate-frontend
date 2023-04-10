@@ -26,10 +26,10 @@
     import { SendAPICall } from "$lib/API.svelte";
     import { onMount } from "svelte";
     import { get } from "svelte/store";
-    //import { page } from "$app/stores";
+    import { page } from "$app/stores";
     import { storage } from "$lib/Storage";
 
-    let page = 0;
+    let pagelist = 0;
     
     class Structure {
         constructor(arg = {}) {
@@ -59,7 +59,7 @@
         var objData = await SendAPICall("find_object", {
             Token: get(storage).token,
             Limit: 20,
-            Offset: 20*page
+            Offset: 20*pagelist
         }, `http://${$page.url.hostname}:8080/`);
 
         if (objData.Code) {
@@ -73,20 +73,20 @@
     onMount(async () => {objs = await loadObjs()});
     
     const previousBtn = async () => {
-        if (page > 0) {
-            page -= 1;
+        if (pagelist > 0) {
+            pagelist -= 1;
             objs = await loadObjs();
         }
     }
     
     const nextBtn = async () => {
         if (objs.length < 20) { return }
-        page += 1;
+        pagelist += 1;
         var data = await loadObjs();
         if (data.length != 0) {
             objs = data;
         } else {
-            page -= 1;
+            pagelist -= 1;
         }
     }
 </script>
@@ -103,7 +103,7 @@
 <div class="p-5 w-full flex flex-col gap-x-3 gap-y-3">
     <div class="flex justify-center items-center w-full space-x-3">
         <PaginationItem on:click={previousBtn}>Назад</PaginationItem>
-        <p class="text-sm text-gray-500">Страница {page + 1}</p>
+        <p class="text-sm text-gray-500">Страница {pagelist + 1}</p>
         <PaginationItem on:click={nextBtn}>Вперёд</PaginationItem>
       </div>
     <div class="w-full">
