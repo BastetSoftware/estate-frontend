@@ -108,14 +108,26 @@
                 Token: get(storage).token,
                 Name: element.name.toString(),
                 Description: element.desc.toString(),
-                Deadline: new Date(element.deadline.toString()).getTime(),
+                Deadline: parseInt(new Date(element.deadline.toString()).getTime().toString()),
                 Status: element.status.toString(),
                 Object: parseInt(element.object.toString()),
-                Maintaner: parseInt(element.maintaner.toString()),
+                Maintainer: parseInt(element.maintaner.toString()),
                 Gid: 1,
-                Permissions: 255,
+                Permissions: 0b11111111,
             }, `http://${$page.url.hostname}:8080/`);
 
+           /*type ArgsFTaskCreate struct {
+	Token       string
+	Name        string
+	Description string
+	Deadline    int64
+	Status      string
+	Object      int64
+	Maintainer  int64
+	Gid         int64
+	Permissions uint8
+}*/
+            
             if (data.Code) {
                 alert(`Произошла ошибка (${data.Code}).`);
                 return;
