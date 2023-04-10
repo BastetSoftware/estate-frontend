@@ -12,7 +12,9 @@
         TableHeadCell,
         TableSearch,
         Pagination,
-        PaginationItem
+        PaginationItem,
+        Accordion,
+        AccordionItem
     } from "flowbite-svelte";
 
     import { Icon } from "@steeze-ui/svelte-icon";
@@ -23,7 +25,7 @@
     import { get } from "svelte/store";
     import { page } from "$app/stores";
     import { storage } from "$lib/Storage";
-    
+
     class Task {
         constructor(arg = {}) {
             this.name = "";
@@ -42,37 +44,45 @@
             }
         }
     }
-    
+
     let tasks = [new Task()];
-    
-    onMount(async () => {tasks = await loadTasks()});
-    
+
+    onMount(async () => {
+        tasks = await loadTasks();
+    });
+
     async function loadTasks() {
-        var objData = await SendAPICall("task_search", {
-            Token: get(storage).token,
-            Limit: 20,
-            Offset: 20*pagelist
-        }, `http://${$page.url.hostname}:8080/`);
+        var objData = await SendAPICall(
+            "task_search",
+            {
+                Token: get(storage).token,
+                Limit: 20,
+                Offset: 20 * pagelist,
+            },
+            `http://${$page.url.hostname}:8080/`
+        );
 
         if (objData.Code) {
             alert(`Произошла ошибка (${objData.Code}).`);
             return;
         }
-        
+
         return objData.Tasks;
     }
-    
+
     let pagelist = 0;
-    
+
     const previousBtn = async () => {
         if (pagelist > 0) {
             pagelist -= 1;
             tasks = await loadTasks();
         }
-    }
-    
+    };
+
     const nextBtn = async () => {
-        if (tasks.length < 20) { return }
+        if (tasks.length < 20) {
+            return;
+        }
         pagelist += 1;
         var data = await loadTasks();
         if (data.length != 0) {
@@ -80,7 +90,7 @@
         } else {
             pagelist -= 1;
         }
-    }
+    };
 </script>
 
 <svelte:head>
@@ -97,7 +107,8 @@
         <PaginationItem on:click={previousBtn}>Назад</PaginationItem>
         <p class="text-sm text-gray-500">Страница {pagelist + 1}</p>
         <PaginationItem on:click={nextBtn}>Вперёд</PaginationItem>
-      </div>
+    </div>
+    
     <div class="w-full">
         <Table shadow>
             <TableHead>
@@ -112,7 +123,10 @@
                 {#each tasks as task}
                     <TableBodyRow>
                         <TableBodyCell>{task.Id}</TableBodyCell>
-                        <TableBodyCell><a href="/task/{task.Id}">{task.Name}</a></TableBodyCell>
+                        <TableBodyCell
+                            ><a href="/task/{task.Id}">{task.Name}</a
+                            ></TableBodyCell
+                        >
                         <TableBodyCell>{task.Deadline}</TableBodyCell>
                         <TableBodyCell>{task.Status}</TableBodyCell>
                         <TableBodyCell>{task.Object}</TableBodyCell>
