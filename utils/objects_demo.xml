@@ -36,4 +36,40 @@
 		<State>Отличное</State>
 		<Actual_user>нет данных</Actual_user>
 	</Object>
+    <Object>
+		<Name>Многоквартирный дом</Name>
+		<Type>building</Type>
+		<Desc>Место для описания.</Desc>
+		<District>Район 1</District>
+		<Region>Московская обл</Region>
+		<Area>5800</Area>
+		<Owner>Группа компаний "ВЕРШИНА"</Owner>
+		<Address>г. Мытищи, ул. Крупской, 5А</Address>
+		<State>Ремонтируется</State>
+		<Actual_user>Много</Actual_user>
+	</Object>
+	<Object>
+		<Name>Техническое помещение</Name>
+		<Type>room</Type>
+		<Desc>Здесь хранится музыкальное оборудование.</Desc>
+		<District>Район 2</District>
+		<Region>Москва</Region>
+		<Area>20</Area>
+		<Owner>Музторг</Owner>
+		<Address>г. Москва, Ярославское шоссе, д. 143</Address>
+		<State>Подлежит сносу</State>
+		<Actual_user>Музторг</Actual_user>
+	</Object>
+	<Object>
+		<Name>Особняк</Name>
+		<Type>bulding</Type>
+		<Desc>Особняк купца Носова.</Desc>
+		<District>Район 3</District>
+		<Region>Москва</Region>
+		<Area>100</Area>
+		<Owner>нет данных</Owner>
+		<Address>Электрозаводская ул., 12, стр. 1, Москва</Address>
+		<State>Отличное</State>
+		<Actual_user>нет данных</Actual_user>
+	</Object>
 </Objects>

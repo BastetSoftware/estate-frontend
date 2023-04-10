@@ -11,6 +11,8 @@
         TableBodyRow,
         TableHeadCell,
         TableSearch,
+        Pagination,
+        PaginationItem,
     } from "flowbite-svelte";
 
     import { Icon } from "@steeze-ui/svelte-icon";
@@ -21,6 +23,8 @@
     //import { page } from "$app/stores";
     import { storage } from "$lib/Storage";
 
+    let page = 0;
+    
     class Structure {
         constructor(arg = {}) {
             this.files = [];
@@ -45,19 +49,40 @@
 
     let objs = [];
 
-    onMount(async () => {
+    async function loadObjs() {
         var objData = await SendAPICall("find_object", {
             Token: get(storage).token,
-            Limit: 50,
+            Limit: 20,
+            Offset: 20*page
         });
 
         if (objData.Code) {
             alert(`Произошла ошибка (${objData.Code}).`);
             return;
         }
-
-        objs = objData.Structures;
-    });
+        
+        return objData.Structures;
+    }
+    
+    onMount(async () => {objs = await loadObjs()});
+    
+    const previousBtn = async () => {
+        if (page > 0) {
+            page -= 1;
+            objs = await loadObjs();
+        }
+    }
+    
+    const nextBtn = async () => {
+        if (objs.length < 20) { return }
+        page += 1;
+        var data = await loadObjs();
+        if (data.length != 0) {
+            objs = data;
+        } else {
+            page -= 1;
+        }
+    }
 </script>
 
 <svelte:head>
@@ -69,10 +94,16 @@
     <h1 class="ml-0 mr-3">Список объектов</h1>
     <p class="m-0 p-0 text-gray-400">сводная таблица, быстрый поиск</p>
 </div>
-<div class="p-5 w-full flex flex-col lg:flex-row gap-x-3 gap-y-3">
+<div class="p-5 w-full flex flex-col gap-x-3 gap-y-3">
+    <div class="flex justify-center items-center w-full space-x-3">
+        <PaginationItem on:click={previousBtn}>Назад</PaginationItem>
+        <p class="text-sm text-gray-500">Страница {page + 1}</p>
+        <PaginationItem on:click={nextBtn}>Вперёд</PaginationItem>
+      </div>
     <div class="w-full">
         <Table shadow>
             <TableHead>
+                <TableHeadCell>ID</TableHeadCell>
                 <TableHeadCell>Название</TableHeadCell>
                 <TableHeadCell>Адрес</TableHeadCell>
                 <TableHeadCell>Район</TableHeadCell>
@@ -86,6 +117,7 @@
             <TableBody>
                 {#each objs as strct}
                     <TableBodyRow>
+                        <TableBodyCell>{strct.Id}</TableBodyCell>
                         <TableBodyCell><a href="/object/{strct.Id}">{strct.Name}</a></TableBodyCell>
                         <TableBodyCell>{strct.Address}</TableBodyCell>
                         <TableBodyCell>{strct.Region}</TableBodyCell>
