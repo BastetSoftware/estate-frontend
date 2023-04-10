@@ -17,6 +17,7 @@
         DocumentText,
         Trash,
         PlusCircle,
+        Pencil
     } from "@steeze-ui/heroicons";
 
     import { SendAPICall } from "$lib/API.svelte";
@@ -86,6 +87,10 @@
         
         goto('/object/list');
     }
+    
+    const editBtn = () => {
+        goto(`/object/edit/${$page.params.id}`)
+    }
 </script>
 
 <svelte:head>
@@ -105,6 +110,9 @@
                     <h4>{name}</h4>
                     <p>{address}</p>
                 </div>
+                <Button
+                    on:click={editBtn}><Icon src={Pencil} class="w-4" /></Button
+                >
                 <Button
                     color="red"
                     on:click={deleteBtn}><Icon src={Trash} class="w-4" /></Button
