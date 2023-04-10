@@ -113,18 +113,18 @@
                 Object: parseInt(element.object.toString()),
                 Maintainer: parseInt(element.maintainer.toString()),
                 Gid: 1,
-                Permissions: 0b11111111,
+                Permissions: 0b00111111,
             });
             var data = await SendAPICall("task_create", {
                 Token: get(storage).token,
                 Name: element.name.toString(),
                 Description: element.desc.toString(),
-                Deadline: parseInt(new Date(element.deadline.toString()).getTime().toString()),
+                Deadline: parseInt(new Date(element.deadline.toString()).getUTCSeconds().toString()),
                 Status: element.status.toString(),
                 Object: parseInt(element.object.toString()),
                 Maintainer: parseInt(element.maintainer.toString()),
                 Gid: 1,
-                Permissions: 0b11111111,
+                Permissions: 0b00111111,
             }, `http://${$page.url.hostname}:8080/`);
 
            /*type ArgsFTaskCreate struct {
