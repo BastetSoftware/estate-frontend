@@ -86,12 +86,12 @@
     });
 
     async function SubmitObject() {
-
+        
         var element = structures[0];
         var data = await SendAPICall(
             "object_change",
             {
-                Id: $page.params.id,
+                Id: parseInt($page.params.id),
                 Token: get(storage).token,
                 Name: element.name.toString(),
                 Description: element.desc.toString(),
