@@ -91,6 +91,7 @@
         var data = await SendAPICall(
             "object_change",
             {
+                Id: $page.params.id,
                 Token: get(storage).token,
                 Name: element.name.toString(),
                 Description: element.desc.toString(),
@@ -102,7 +103,6 @@
                 State: element.state.toString(),
                 Owner: element.owner.toString(),
                 Actual_user: element.actual_user.toString(),
-                Gid: 1,
                 Permissions: 255,
             },
             `http://${$page.url.hostname}:8080/`
